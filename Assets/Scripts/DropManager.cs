@@ -1,28 +1,57 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class DropManager : MonoBehaviour
 {
-    public GameObject dropPrefab; // µå¶øµÉ ¾ÆÀÌÅÛ ÇÁ¸®ÆÕ (ItemPickupÀÌ ºÙ¾î ÀÖ¾î¾ß ÇÔ)
     public InventoryManager inventory;
-    public Transform dropPoint; // µå¶øµÉ À§Ä¡ (Ä«¸Ş¶ó ¾Õ or ÇÃ·¹ÀÌ¾î ¹ß¹Ø)
+    public Transform dropPoint;
 
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Q))
         {
+            // í˜„ì¬ ì„ íƒëœ ìŠ¬ë¡¯ì˜ ì•„ì´í…œ ê°€ì ¸ì˜¤ê¸°
             ItemData item = inventory.GetSelectedItem();
-            if (item == null) return;
+            if (item == null)
+            {
+                Debug.Log("ì„ íƒëœ ì•„ì´í…œì´ ì—†ìŒ");
+                return;
+            }
 
-            // ÀÎº¥Åä¸®¿¡¼­ Á¦°Å
+            // ì¸ë²¤í† ë¦¬ì—ì„œ 1ê°œ ì œê±°
             bool removed = inventory.RemoveItem(item, 1);
-            if (!removed) return;
+            if (!removed)
+            {
+                Debug.Log("ì¸ë²¤í† ë¦¬ì—ì„œ ì•„ì´í…œ ì œê±° ì‹¤íŒ¨");
+                return;
+            }
 
-            // µå¶ø ¿ÀºêÁ§Æ® »ı¼º
-            GameObject obj = Instantiate(dropPrefab, dropPoint.position, Quaternion.identity);
+            // ì•„ì´í…œì— ì—°ê²°ëœ í”„ë¦¬íŒ¹ìœ¼ë¡œ ë“œë
+            if (item.worldPrefab == null)
+            {
+                Debug.LogError($"âŒ {item.name} ì˜ worldPrefab ì´ null ì…ë‹ˆë‹¤. ItemDataì— í”„ë¦¬íŒ¹ ì—°ê²°í•˜ì„¸ìš”.");
+                return;
+            }
+
+            GameObject obj = Instantiate(item.worldPrefab, dropPoint.position, Quaternion.identity);
+
+            // ì•„ì´í…œ ì •ë³´ ì—°ê²°
             ItemPickup pickup = obj.GetComponent<ItemPickup>();
-            pickup.itemData = item;
+            if (pickup != null)
+            {
+                pickup.itemData = item;
+            }
+
+            // ë¬¼ë¦¬ ë°˜ë™ íš¨ê³¼
+            Rigidbody rb = obj.GetComponent<Rigidbody>();
+            if (rb != null)
+            {
+                rb.AddForce(dropPoint.forward * 2f + Vector3.up * 1.5f, ForceMode.Impulse);
+            }
+
+            // ì¼ì • ì‹œê°„ í›„ ìë™ ì œê±° (ì„ íƒ ì‚¬í•­)
+            Destroy(obj, 30f);
         }
     }
 }
