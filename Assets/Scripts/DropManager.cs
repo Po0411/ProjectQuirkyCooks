@@ -7,11 +7,16 @@ public class DropManager : MonoBehaviour
     public InventoryManager inventory;
     public Transform dropPoint;
 
+    [Header("Drop Settings")]
+    public Vector3 dropOffset = new Vector3(0, 1.2f, 0.6f); // 중앙 앞쪽
+    public float forwardForce = 2f;
+    public float upwardForce = 3f;
+    public float lifetime = 30f;
+
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Q))
         {
-            // 현재 선택된 슬롯의 아이템 가져오기
             ItemData item = inventory.GetSelectedItem();
             if (item == null)
             {
@@ -19,7 +24,6 @@ public class DropManager : MonoBehaviour
                 return;
             }
 
-            // 인벤토리에서 1개 제거
             bool removed = inventory.RemoveItem(item, 1);
             if (!removed)
             {
@@ -27,31 +31,34 @@ public class DropManager : MonoBehaviour
                 return;
             }
 
-            // 아이템에 연결된 프리팹으로 드랍
             if (item.worldPrefab == null)
             {
                 Debug.LogError($"❌ {item.name} 의 worldPrefab 이 null 입니다. ItemData에 프리팹 연결하세요.");
                 return;
             }
 
-            GameObject obj = Instantiate(item.worldPrefab, dropPoint.position, Quaternion.identity);
+            // 드랍 위치 계산
+            Vector3 dropPosition = dropPoint.position +
+                                   dropPoint.forward * dropOffset.z +
+                                   dropPoint.up * dropOffset.y +
+                                   dropPoint.right * dropOffset.x;
 
-            // 아이템 정보 연결
+            GameObject obj = Instantiate(item.worldPrefab, dropPosition, Quaternion.identity);
+
             ItemPickup pickup = obj.GetComponent<ItemPickup>();
             if (pickup != null)
             {
                 pickup.itemData = item;
             }
 
-            // 물리 반동 효과
             Rigidbody rb = obj.GetComponent<Rigidbody>();
             if (rb != null)
             {
-                rb.AddForce(dropPoint.forward * 2f + Vector3.up * 1.5f, ForceMode.Impulse);
+                Vector3 throwDirection = dropPoint.forward * forwardForce + Vector3.up * upwardForce;
+                rb.AddForce(throwDirection, ForceMode.Impulse);
             }
 
-            // 일정 시간 후 자동 제거 (선택 사항)
-            Destroy(obj, 30f);
+            Destroy(obj, lifetime);
         }
     }
 }

@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1001 &6193341959301753070
+--- !u!1001 &8115119072237840822
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -10,18 +10,33 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: f0f454c1b385bd74e95e786a25f58048,
         type: 3}
+      propertyPath: m_LocalScale.x
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: f0f454c1b385bd74e95e786a25f58048,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: f0f454c1b385bd74e95e786a25f58048,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: f0f454c1b385bd74e95e786a25f58048,
+        type: 3}
       propertyPath: m_LocalPosition.x
-      value: 533.6648
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: f0f454c1b385bd74e95e786a25f58048,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.000000014901161
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: f0f454c1b385bd74e95e786a25f58048,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 580.9243
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: f0f454c1b385bd74e95e786a25f58048,
         type: 3}
@@ -58,6 +73,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: f0f454c1b385bd74e95e786a25f58048,
+        type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: -3988218568073741993, guid: f0f454c1b385bd74e95e786a25f58048,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -72,7 +92,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 67c6b27451fe4334cb139d801985b491, type: 2}
+      objectReference: {fileID: 2100000, guid: ad90bef5e8afdb344945be14ad9b1334, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

@@ -232,7 +232,7 @@ MonoBehaviour:
   active: 0
   lift:
     m_OverrideState: 0
-    m_Value: {x: 1, y: 1, z: 1, w: 0.009930411}
+    m_Value: {x: 1, y: 1, z: 1, w: 0}
   gamma:
     m_OverrideState: 0
     m_Value: {x: 1, y: 1, z: 1, w: 0}
@@ -333,7 +333,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   active: 0
   intensity:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value: 0
 --- !u!114 &8763591335768667313
 MonoBehaviour:
@@ -406,7 +406,7 @@ MonoBehaviour:
     m_Value: 0
   greenOutRedIn:
     m_OverrideState: 0
-    m_Value: 200
+    m_Value: 0
   greenOutGreenIn:
     m_OverrideState: 0
     m_Value: 100
