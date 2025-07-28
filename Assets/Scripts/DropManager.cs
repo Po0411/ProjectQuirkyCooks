@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Unity.Netcode;
 
-public class DropManager : MonoBehaviour
+public class DropManager : NetworkBehaviour
 {
     public InventoryManager inventory;
     public Transform dropPoint;
@@ -15,6 +16,8 @@ public class DropManager : MonoBehaviour
 
     void Update()
     {
+        if (!IsOwner) return; // 자기 클라이언트만 입력 처리
+
         if (Input.GetKeyDown(KeyCode.Q))
         {
             ItemData item = inventory.GetSelectedItem();
@@ -31,34 +34,70 @@ public class DropManager : MonoBehaviour
                 return;
             }
 
-            if (item.worldPrefab == null)
+            // 서버에 드랍 요청
+            DropItemServerRpc(item.name);
+        }
+    }
+
+    [ServerRpc]
+    private void DropItemServerRpc(string itemName, ServerRpcParams rpcParams = default)
+    {
+        // InventoryManager에서 아이템 데이터 찾아오기 (InventoryManager에 구현 필요)
+        ItemData item = inventory.GetItemByName(itemName);
+        if (item == null || item.worldPrefab == null)
+        {
+            Debug.LogError($"❌ {itemName} worldPrefab이 null 입니다.");
+            return;
+        }
+
+        // 드랍 위치 계산
+        Vector3 dropPosition = dropPoint.position +
+                               dropPoint.forward * dropOffset.z +
+                               dropPoint.up * dropOffset.y +
+                               dropPoint.right * dropOffset.x;
+
+        GameObject obj = Instantiate(item.worldPrefab, dropPosition, Quaternion.identity);
+
+        // 아이템 데이터 전달
+        ItemPickup pickup = obj.GetComponent<ItemPickup>();
+        if (pickup != null)
+        {
+            pickup.itemData = item;
+        }
+
+        // 물리 반동
+        Rigidbody rb = obj.GetComponent<Rigidbody>();
+        if (rb != null)
+        {
+            Vector3 throwDirection = dropPoint.forward * forwardForce + Vector3.up * upwardForce;
+            rb.AddForce(throwDirection, ForceMode.Impulse);
+        }
+
+        // 네트워크 스폰
+        NetworkObject netObj = obj.GetComponent<NetworkObject>();
+        if (netObj != null)
+        {
+            netObj.Spawn(true);
+        }
+
+        // 일정 시간 후 제거
+        StartCoroutine(DestroyAfterLifetime(obj, lifetime));
+    }
+
+    private IEnumerator DestroyAfterLifetime(GameObject obj, float time)
+    {
+        yield return new WaitForSeconds(time);
+
+        if (obj != null)
+        {
+            if (obj.TryGetComponent(out NetworkObject netObj) && netObj.IsSpawned)
             {
-                Debug.LogError($"❌ {item.name} 의 worldPrefab 이 null 입니다. ItemData에 프리팹 연결하세요.");
-                return;
+                netObj.Despawn(true);
             }
-
-            // 드랍 위치 계산
-            Vector3 dropPosition = dropPoint.position +
-                                   dropPoint.forward * dropOffset.z +
-                                   dropPoint.up * dropOffset.y +
-                                   dropPoint.right * dropOffset.x;
-
-            GameObject obj = Instantiate(item.worldPrefab, dropPosition, Quaternion.identity);
-
-            ItemPickup pickup = obj.GetComponent<ItemPickup>();
-            if (pickup != null)
+            else
             {
-                pickup.itemData = item;
+                Destroy(obj);
             }
-
-            Rigidbody rb = obj.GetComponent<Rigidbody>();
-            if (rb != null)
-            {
-                Vector3 throwDirection = dropPoint.forward * forwardForce + Vector3.up * upwardForce;
-                rb.AddForce(throwDirection, ForceMode.Impulse);
-            }
-
-            Destroy(obj, lifetime);
         }
     }
 }

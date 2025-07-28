@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,6 +7,9 @@ public class InventoryManager : MonoBehaviour
     [Header("Slots")]
     public InventorySlot[] slots;
     public int selectedIndex = 0;
+
+    [Header("아이템 데이터베이스")]
+    public List<ItemData> allItems; // ✅ Inspector에서 모든 ItemData 등록
 
     void Start()
     {
@@ -53,7 +56,7 @@ public class InventoryManager : MonoBehaviour
             }
         }
 
-        Debug.Log("�κ��丮 ���� ��");
+        Debug.Log("인벤토리 가득 참");
     }
 
     public bool HasItem(ItemData item, int amount)
@@ -91,5 +94,16 @@ public class InventoryManager : MonoBehaviour
         if (index < 0 || index >= slots.Length) return;
         selectedIndex = index;
         UpdateSlotHighlight();
+    }
+
+    public ItemData GetItemByName(string itemName)
+    {
+        foreach (var item in allItems) // ✅ Inspector에 등록된 ItemData 중 검색
+        {
+            if (item != null && item.itemName == itemName)
+                return item;
+        }
+        Debug.LogWarning($"❌ {itemName} ItemData를 allItems에서 찾지 못했습니다.");
+        return null;
     }
 }
