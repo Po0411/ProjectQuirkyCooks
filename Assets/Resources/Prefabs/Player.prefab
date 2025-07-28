@@ -872,6 +872,7 @@ GameObject:
   - component: {fileID: 8285093777135956988}
   - component: {fileID: 746104187842417219}
   - component: {fileID: 8748821626916083658}
+  - component: {fileID: 3283239486347669983}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -935,7 +936,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 771052439
+  GlobalObjectIdHash: 3130037850
   InScenePlacedSourceGlobalObjectIdHash: 0
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -1030,6 +1031,20 @@ MonoBehaviour:
   InLocalSpace: 0
   Interpolate: 1
   SlerpPosition: 0
+--- !u!114 &3283239486347669983
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1056964343921413429}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb2fb8d458d800548a64a044379b0eb7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerCamera: {fileID: 4964120093976857778}
+  audioListener: {fileID: 5050753334264941349}
 --- !u!1 &1441755191038468704
 GameObject:
   m_ObjectHideFlags: 0

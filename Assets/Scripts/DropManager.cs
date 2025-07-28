@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Unity.Netcode;
 
@@ -9,7 +8,7 @@ public class DropManager : NetworkBehaviour
     public Transform dropPoint;
 
     [Header("Drop Settings")]
-    public Vector3 dropOffset = new Vector3(0, 1.2f, 0.6f); // 중앙 앞쪽
+    public Vector3 dropOffset = new Vector3(0, 1.2f, 0.6f); // 플레이어 앞 중앙
     public float forwardForce = 2f;
     public float upwardForce = 3f;
     public float lifetime = 30f;
@@ -27,6 +26,7 @@ public class DropManager : NetworkBehaviour
                 return;
             }
 
+            // 인벤토리에서 제거
             bool removed = inventory.RemoveItem(item, 1);
             if (!removed)
             {
@@ -39,32 +39,34 @@ public class DropManager : NetworkBehaviour
         }
     }
 
-    [ServerRpc(RequireOwnership = false)]
+    [ServerRpc]
     private void DropItemServerRpc(string itemName, ServerRpcParams rpcParams = default)
     {
-        ItemData item = InventoryManager.Instance.GetItemByName(itemName);
+        // InventoryManager에서 아이템 데이터 가져오기
+        ItemData item = inventory.GetItemByName(itemName);
         if (item == null || item.worldPrefab == null)
         {
-            Debug.LogError($"❌ {itemName} worldPrefab 이 null 입니다. ItemData에 프리팹 연결하세요.");
+            Debug.LogError($"❌ {itemName} worldPrefab이 null 입니다.");
             return;
         }
 
-        // 드랍 위치
+        // 드랍 위치 계산
         Vector3 dropPosition = dropPoint.position +
                                dropPoint.forward * dropOffset.z +
                                dropPoint.up * dropOffset.y +
                                dropPoint.right * dropOffset.x;
 
+        // 오브젝트 생성
         GameObject obj = Instantiate(item.worldPrefab, dropPosition, Quaternion.identity);
 
-        // 아이템 데이터 연결
+        // ItemPickup에 데이터 연결
         ItemPickup pickup = obj.GetComponent<ItemPickup>();
         if (pickup != null)
         {
             pickup.itemData = item;
         }
 
-        // 물리 효과
+        // Rigidbody 물리 효과
         Rigidbody rb = obj.GetComponent<Rigidbody>();
         if (rb != null)
         {
@@ -80,10 +82,10 @@ public class DropManager : NetworkBehaviour
         }
         else
         {
-            Debug.LogError($"❌ {item.worldPrefab.name} 프리팹에 NetworkObject가 없음!");
+            Debug.LogError($"⚠️ {itemName} 프리팹에 NetworkObject가 없습니다!");
         }
 
-        // 일정 시간 후 제거
+        // 일정 시간 후 파괴
         StartCoroutine(DestroyAfterLifetime(obj, lifetime));
     }
 
