@@ -9,5 +9,5 @@ public class ItemData : ScriptableObject
     public Sprite icon;
     public int maxStack = 4;
 
-    public GameObject worldPrefab; // ✅ 반드시 GameObject 로 바꿔야 프리팹 등록 가능
+    public GameObject worldPrefab; // ✅ 드랍할 실제 오브젝트 프리팹
 }

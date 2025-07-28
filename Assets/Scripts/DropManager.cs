@@ -35,22 +35,21 @@ public class DropManager : NetworkBehaviour
             }
 
             // 서버에 드랍 요청
-            DropItemServerRpc(item.name);
+            DropItemServerRpc(item.itemName);
         }
     }
 
-    [ServerRpc]
+    [ServerRpc(RequireOwnership = false)]
     private void DropItemServerRpc(string itemName, ServerRpcParams rpcParams = default)
     {
-        // InventoryManager에서 아이템 데이터 찾아오기 (InventoryManager에 구현 필요)
-        ItemData item = inventory.GetItemByName(itemName);
+        ItemData item = InventoryManager.Instance.GetItemByName(itemName);
         if (item == null || item.worldPrefab == null)
         {
-            Debug.LogError($"❌ {itemName} worldPrefab이 null 입니다.");
+            Debug.LogError($"❌ {itemName} worldPrefab 이 null 입니다. ItemData에 프리팹 연결하세요.");
             return;
         }
 
-        // 드랍 위치 계산
+        // 드랍 위치
         Vector3 dropPosition = dropPoint.position +
                                dropPoint.forward * dropOffset.z +
                                dropPoint.up * dropOffset.y +
@@ -58,14 +57,14 @@ public class DropManager : NetworkBehaviour
 
         GameObject obj = Instantiate(item.worldPrefab, dropPosition, Quaternion.identity);
 
-        // 아이템 데이터 전달
+        // 아이템 데이터 연결
         ItemPickup pickup = obj.GetComponent<ItemPickup>();
         if (pickup != null)
         {
             pickup.itemData = item;
         }
 
-        // 물리 반동
+        // 물리 효과
         Rigidbody rb = obj.GetComponent<Rigidbody>();
         if (rb != null)
         {
@@ -78,6 +77,10 @@ public class DropManager : NetworkBehaviour
         if (netObj != null)
         {
             netObj.Spawn(true);
+        }
+        else
+        {
+            Debug.LogError($"❌ {item.worldPrefab.name} 프리팹에 NetworkObject가 없음!");
         }
 
         // 일정 시간 후 제거

@@ -4,12 +4,22 @@ using UnityEngine;
 
 public class InventoryManager : MonoBehaviour
 {
+    public static InventoryManager Instance; // ✅ 전역 접근용
+
     [Header("Slots")]
     public InventorySlot[] slots;
     public int selectedIndex = 0;
 
-    [Header("아이템 데이터베이스")]
-    public List<ItemData> allItems; // ✅ Inspector에서 모든 ItemData 등록
+    [Header("모든 아이템 데이터 등록")]
+    public List<ItemData> allItems = new List<ItemData>();
+
+    void Awake()
+    {
+        if (Instance == null)
+            Instance = this;
+        else
+            Destroy(gameObject);
+    }
 
     void Start()
     {
@@ -55,7 +65,6 @@ public class InventoryManager : MonoBehaviour
                 return;
             }
         }
-
         Debug.Log("인벤토리 가득 참");
     }
 
@@ -98,12 +107,12 @@ public class InventoryManager : MonoBehaviour
 
     public ItemData GetItemByName(string itemName)
     {
-        foreach (var item in allItems) // ✅ Inspector에 등록된 ItemData 중 검색
+        foreach (var item in allItems)
         {
-            if (item != null && item.itemName == itemName)
+            if (item.itemName == itemName)
                 return item;
         }
-        Debug.LogWarning($"❌ {itemName} ItemData를 allItems에서 찾지 못했습니다.");
+        Debug.LogError($"❌ {itemName} 아이템을 allItems에서 찾을 수 없음");
         return null;
     }
 }
