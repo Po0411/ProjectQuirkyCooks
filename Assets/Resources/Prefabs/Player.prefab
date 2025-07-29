@@ -870,7 +870,6 @@ GameObject:
   - component: {fileID: 7393715956100139065}
   - component: {fileID: 2896801571393347769}
   - component: {fileID: 1348978739420986474}
-  - component: {fileID: 8285093777135956988}
   - component: {fileID: 746104187842417219}
   - component: {fileID: 8748821626916083658}
   - component: {fileID: 3283239486347669983}
@@ -990,22 +989,6 @@ MonoBehaviour:
   staminaDrain: 2
   staminaRegen: 1
   playerCamera: {fileID: 4964120093976857778}
---- !u!114 &8285093777135956988
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1056964343921413429}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 890f99c1fa441bb45b165c69c86ceb60, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  interactRange: 3
-  interactLayer:
-    serializedVersion: 2
-    m_Bits: 64
 --- !u!114 &746104187842417219
 MonoBehaviour:
   m_ObjectHideFlags: 0

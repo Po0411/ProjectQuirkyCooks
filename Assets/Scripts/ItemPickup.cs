@@ -7,52 +7,52 @@ public class ItemPickup : NetworkBehaviour
 
     void OnMouseOver()
     {
-        if (!IsOwner) return;
+        if (!IsOwner) return; // 내 클라만 입력 받음
 
         if (Input.GetMouseButtonDown(0))
         {
             if (itemData == null)
             {
-                Debug.LogError("❌ itemData 없음 (ItemPickup에 연결했는지 확인)");
+                Debug.LogError("❌ itemData 없음 (프리팹에 연결했는지 확인)");
                 return;
             }
 
-            Debug.Log($"아이템 줍기 요청: {itemData.itemName}");
-            RequestPickupServerRpc(NetworkObject, itemData.itemName);
+            // 내 Player 오브젝트 찾기
+            var myPlayer = NetworkManager.Singleton.LocalClient.PlayerObject;
+            if (myPlayer == null)
+            {
+                Debug.LogError("❌ 내 PlayerObject 없음");
+                return;
+            }
+
+            var inv = myPlayer.GetComponent<InventoryManager>();
+            if (inv == null)
+            {
+                Debug.LogError("❌ 내 Player에 InventoryManager 없음");
+                return;
+            }
+
+            // 인벤토리에 추가
+            bool added = inv.AddItemLocal(itemData);
+            if (added)
+            {
+                Debug.Log($"✅ {itemData.itemName} 먹음");
+                // 서버에 Despawn 요청
+                RequestDespawnServerRpc(NetworkObject);
+            }
+            else
+            {
+                Debug.Log("⚠ 인벤토리 가득 참");
+            }
         }
     }
 
     [ServerRpc(RequireOwnership = false)]
-    private void RequestPickupServerRpc(NetworkObjectReference itemRef, string itemName, ServerRpcParams rpcParams = default)
+    private void RequestDespawnServerRpc(NetworkObjectReference itemRef)
     {
-        ulong senderId = rpcParams.Receive.SenderClientId;
-
-        if (!NetworkManager.Singleton.ConnectedClients.TryGetValue(senderId, out var client))
-        {
-            Debug.LogError($"❌ SenderId {senderId} 클라이언트를 찾을 수 없음");
-            return;
-        }
-
-        var player = client.PlayerObject;
-        if (player == null)
-        {
-            Debug.LogError("❌ PlayerObject가 null");
-            return;
-        }
-
-        var inv = player.GetComponent<InventoryManager>();
-        if (inv == null)
-        {
-            Debug.LogError("❌ PlayerPrefab에 InventoryManager 없음");
-            return;
-        }
-
-        // 서버가 직접 AddItemServerRpc 호출 → 이 안에서 Host 중복 방지 로직 처리됨
-        inv.AddItemServerRpc(itemName, senderId);
-
         if (itemRef.TryGet(out NetworkObject netObj))
         {
-            netObj.Despawn(true);
+            netObj.Despawn(true); // 서버에서 제거 → 모든 클라 동기화
         }
     }
 }

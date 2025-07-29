@@ -13605,8 +13605,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 964474228}
-  - component: {fileID: 964474227}
   - component: {fileID: 964474229}
+  - component: {fileID: 964474227}
   m_Layer: 0
   m_Name: ItemSpawner
   m_TagString: Untagged
@@ -13630,7 +13630,7 @@ MonoBehaviour:
   - {fileID: 458683740065219655, guid: 95538d08474baaa4ca4bfdc68ac76622, type: 3}
   center: {x: 0, y: 0.54, z: 15.03}
   size: {x: 10, y: 1, z: 10}
-  spawnCount: 10
+  spawnCount: 100
 --- !u!4 &964474228
 Transform:
   m_ObjectHideFlags: 0

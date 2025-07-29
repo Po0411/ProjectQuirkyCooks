@@ -31,14 +31,14 @@ public class InventoryManager : NetworkBehaviour
         }
     }
 
-    // 슬롯 하이라이트 갱신
+    // 슬롯 하이라이트
     public void UpdateSlotHighlight()
     {
         for (int i = 0; i < slots.Length; i++)
             slots[i].SetSelected(i == selectedIndex);
     }
 
-    // 현재 선택된 아이템 반환
+    // 현재 선택된 아이템
     public ItemData GetSelectedItem()
     {
         if (selectedIndex >= 0 && selectedIndex < slots.Length)
@@ -46,15 +46,15 @@ public class InventoryManager : NetworkBehaviour
         return null;
     }
 
-    // 로컬 인벤토리에 아이템 추가
-    public void AddItemLocal(ItemData newItem)
+    // 아이템 추가 (로컬)
+    public bool AddItemLocal(ItemData newItem)
     {
         foreach (var slot in slots)
         {
             if (!slot.IsEmpty() && slot.Matches(newItem) && !slot.IsFull())
             {
                 slot.AddCount();
-                return;
+                return true;
             }
         }
         foreach (var slot in slots)
@@ -62,67 +62,13 @@ public class InventoryManager : NetworkBehaviour
             if (slot.IsEmpty())
             {
                 slot.SetItem(newItem);
-                return;
+                return true;
             }
         }
-        Debug.Log("⚠ 인벤토리 가득 참");
+        return false;
     }
 
-    // 서버에서 아이템 추가 (Host 중복 방지)
-    [ServerRpc(RequireOwnership = false)]
-    public void AddItemServerRpc(string itemName, ulong senderId)
-    {
-        if (!NetworkManager.Singleton.ConnectedClients.TryGetValue(senderId, out var client))
-        {
-            Debug.LogError($"❌ {senderId}번 클라이언트 없음");
-            return;
-        }
-
-        var player = client.PlayerObject;
-        var inv = player.GetComponent<InventoryManager>();
-        var item = inv.GetItemByName(itemName);
-
-        if (item != null)
-        {
-            // 서버에서 먼저 추가 (Host 인벤토리 포함)
-            inv.AddItemLocal(item);
-
-            // Host라면 ClientRpc를 보내지 않음 (중복 방지)
-            if (!(IsHost && client.ClientId == NetworkManager.Singleton.LocalClientId))
-            {
-                UpdateInventoryClientRpc(itemName, new ClientRpcParams
-                {
-                    Send = new ClientRpcSendParams
-                    {
-                        TargetClientIds = new[] { client.ClientId }
-                    }
-                });
-            }
-        }
-    }
-
-    [ClientRpc]
-    public void UpdateInventoryClientRpc(string itemName, ClientRpcParams rpcParams = default)
-    {
-        if (!IsOwner) return;
-
-        var item = GetItemByName(itemName);
-        if (item != null)
-        {
-            AddItemLocal(item);
-            Debug.Log($"✅ {itemName} 인벤토리에 추가됨");
-        }
-    }
-
-    [ClientRpc]
-    public void RefreshInventoryClientRpc()
-    {
-        if (!IsOwner) return;
-        UpdateSlotHighlight();
-        Debug.Log("✅ 인벤토리 UI 갱신 완료");
-    }
-
-    // 아이템 제거
+    // 아이템 제거 (로컬)
     public bool RemoveItem(ItemData item, int amount)
     {
         foreach (var slot in slots)
