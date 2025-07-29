@@ -1,8 +1,8 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Unity.Netcode;
 
-public class ItemSpawner : MonoBehaviour
+public class ItemSpawner : NetworkBehaviour
 {
     [Header("아이템 프리팹들")]
     public List<GameObject> itemPrefabs;
@@ -14,12 +14,15 @@ public class ItemSpawner : MonoBehaviour
     [Header("스폰 개수")]
     public int spawnCount = 10;
 
-    void Start()
+    public override void OnNetworkSpawn()
     {
-        SpawnItems();
+        if (IsServer)  // Host 또는 Dedicated Server만 실행
+        {
+            SpawnItems();
+        }
     }
 
-    public void SpawnItems()
+    private void SpawnItems()
     {
         for (int i = 0; i < spawnCount; i++)
         {
@@ -28,12 +31,22 @@ public class ItemSpawner : MonoBehaviour
             // 랜덤 프리팹 선택
             GameObject randomPrefab = itemPrefabs[Random.Range(0, itemPrefabs.Count)];
 
-            // 소환
-            Instantiate(randomPrefab, spawnPos, Quaternion.identity);
+            // 서버에서 네트워크 오브젝트 생성
+            GameObject itemInstance = Instantiate(randomPrefab, spawnPos, Quaternion.identity);
+            var netObj = itemInstance.GetComponent<NetworkObject>();
+
+            if (netObj != null)
+            {
+                netObj.Spawn(); // NGO 관리 시작
+            }
+            else
+            {
+                Debug.LogWarning($"{randomPrefab.name} 에 NetworkObject 컴포넌트가 없습니다!");
+            }
         }
     }
 
-    Vector3 GetRandomPositionInBox()
+    private Vector3 GetRandomPositionInBox()
     {
         Vector3 randomPos = new Vector3(
             Random.Range(-size.x / 2, size.x / 2),
@@ -45,7 +58,7 @@ public class ItemSpawner : MonoBehaviour
     }
 
     // 박스 영역 씬에서 시각화
-    void OnDrawGizmosSelected()
+    private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.green;
         Gizmos.DrawWireCube(center, size);
