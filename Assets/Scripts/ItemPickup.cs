@@ -7,8 +7,7 @@ public class ItemPickup : NetworkBehaviour
 
     void OnMouseOver()
     {
-        if (!IsOwner) return; // 내 클라만 입력 받음
-
+        // Owner 체크 제거 → 모든 클라가 클릭 처리 가능
         if (Input.GetMouseButtonDown(0))
         {
             if (itemData == null)
@@ -17,7 +16,7 @@ public class ItemPickup : NetworkBehaviour
                 return;
             }
 
-            // 내 Player 오브젝트 찾기
+            // 내 Player 오브젝트 가져오기
             var myPlayer = NetworkManager.Singleton.LocalClient.PlayerObject;
             if (myPlayer == null)
             {
@@ -32,12 +31,11 @@ public class ItemPickup : NetworkBehaviour
                 return;
             }
 
-            // 인벤토리에 추가
             bool added = inv.AddItemLocal(itemData);
             if (added)
             {
                 Debug.Log($"✅ {itemData.itemName} 먹음");
-                // 서버에 Despawn 요청
+                // 서버에 Despawn 요청 (아이템 제거)
                 RequestDespawnServerRpc(NetworkObject);
             }
             else
@@ -52,7 +50,7 @@ public class ItemPickup : NetworkBehaviour
     {
         if (itemRef.TryGet(out NetworkObject netObj))
         {
-            netObj.Despawn(true); // 서버에서 제거 → 모든 클라 동기화
+            netObj.Despawn(true);
         }
     }
 }

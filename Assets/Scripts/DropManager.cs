@@ -14,12 +14,22 @@ public class DropManager : NetworkBehaviour
 
     void Update()
     {
-        if (!IsOwner) return;
-
+        // ❌ IsOwner 제거: 접속자도 바로 가능
         if (Input.GetKeyDown(KeyCode.Q))
         {
-            var inv = GetComponent<InventoryManager>();
-            if (inv == null) return;
+            var myPlayer = NetworkManager.Singleton.LocalClient.PlayerObject;
+            if (myPlayer == null)
+            {
+                Debug.LogError("❌ 내 PlayerObject 없음");
+                return;
+            }
+
+            var inv = myPlayer.GetComponent<InventoryManager>();
+            if (inv == null)
+            {
+                Debug.LogError("❌ 내 Player에 InventoryManager 없음");
+                return;
+            }
 
             ItemData item = inv.GetSelectedItem();
             if (item == null)
@@ -31,7 +41,7 @@ public class DropManager : NetworkBehaviour
             bool removed = inv.RemoveItem(item, 1);
             if (!removed)
             {
-                Debug.Log("⚠ 아이템 제거 실패");
+                Debug.Log("⚠ 인벤토리에서 아이템 제거 실패");
                 return;
             }
 
@@ -44,7 +54,6 @@ public class DropManager : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     private void SpawnDropServerRpc(string itemName, Vector3 origin, Vector3 forward, ServerRpcParams rpcParams = default)
     {
-        // 서버에서 아이템 데이터 찾기
         var invManager = FindObjectOfType<InventoryManager>();
         ItemData item = invManager.GetItemByName(itemName);
 
@@ -54,11 +63,10 @@ public class DropManager : NetworkBehaviour
             return;
         }
 
-        // 드랍 위치 계산
+        // 드랍 위치
         Vector3 dropPosition = origin +
                                forward * dropOffset.z +
-                               Vector3.up * dropOffset.y +
-                               Vector3.right * dropOffset.x;
+                               Vector3.up * dropOffset.y;
 
         // 오브젝트 생성
         GameObject obj = Instantiate(item.worldPrefab, dropPosition, Quaternion.identity);
@@ -80,7 +88,7 @@ public class DropManager : NetworkBehaviour
         if (netObj != null && !netObj.IsSpawned)
             netObj.Spawn(true);
 
-        // 일정 시간 후 자동 제거
+        // 일정 시간 후 자동 삭제
         StartCoroutine(DestroyAfterLifetime(obj, lifetime));
     }
 
