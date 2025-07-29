@@ -1,21 +1,32 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using Unity.Netcode;
 
-public class ItemPickup : MonoBehaviour
+public class ItemPickup : NetworkBehaviour
 {
     public ItemData itemData;
 
     void OnMouseOver()
     {
-        if (Input.GetMouseButtonDown(0)) // 좌클릭
+        if (!IsOwner) return; // 자기 캐릭터일 때만
+        if (Input.GetMouseButtonDown(0))
         {
             InventoryManager inv = FindObjectOfType<InventoryManager>();
             if (inv != null)
             {
                 inv.AddItem(itemData);
-                Destroy(gameObject); // 씹어서 먹음
+
+                // 서버에 아이템 제거 요청
+                RequestDestroyServerRpc(NetworkObject);
             }
+        }
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void RequestDestroyServerRpc(NetworkObjectReference itemRef)
+    {
+        if (itemRef.TryGet(out NetworkObject netObj))
+        {
+            netObj.Despawn(true); // 모든 클라이언트에서 제거
         }
     }
 }
