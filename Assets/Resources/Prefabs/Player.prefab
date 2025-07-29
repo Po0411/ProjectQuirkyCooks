@@ -868,6 +868,7 @@ GameObject:
   - component: {fileID: 8556139372743554277}
   - component: {fileID: 1142287481396581762}
   - component: {fileID: 7393715956100139065}
+  - component: {fileID: 2896801571393347769}
   - component: {fileID: 1348978739420986474}
   - component: {fileID: 8285093777135956988}
   - component: {fileID: 746104187842417219}
@@ -875,7 +876,7 @@ GameObject:
   - component: {fileID: 3283239486347669983}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -945,6 +946,29 @@ MonoBehaviour:
   SpawnWithObservers: 1
   DontDestroyWithOwner: 0
   AutoObjectParentSync: 1
+--- !u!114 &2896801571393347769
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1056964343921413429}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 929c0752511088f43b564e64b680a04b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  slots:
+  - {fileID: 5315808302394063515}
+  - {fileID: 5585529304513330298}
+  - {fileID: 5918447863012461471}
+  - {fileID: 7498878576575627694}
+  - {fileID: 6921724958758911595}
+  - {fileID: 1157540546573194897}
+  - {fileID: 7933930583290514308}
+  selectedIndex: 3
+  allItems:
+  - {fileID: 11400000, guid: 1aac73748c898a8429c4743d83d8b6f9, type: 2}
 --- !u!114 &1348978739420986474
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -994,7 +1018,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3501c9a0c7a315a48b2c3871ec86f430, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inventory: {fileID: 8487292438139109602}
   dropPoint: {fileID: 8556139372743554277}
   dropOffset: {x: 0, y: 1.2, z: 0.6}
   forwardForce: 2
@@ -3310,7 +3333,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4434747327793466598}
   - component: {fileID: 7942299510300772391}
-  - component: {fileID: 8487292438139109602}
   m_Layer: 5
   m_Name: InventoryUIPanel
   m_TagString: Untagged
@@ -3352,29 +3374,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7231072963010137080}
   m_CullTransparentMesh: 1
---- !u!114 &8487292438139109602
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7231072963010137080}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 929c0752511088f43b564e64b680a04b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  slots:
-  - {fileID: 5315808302394063515}
-  - {fileID: 5585529304513330298}
-  - {fileID: 5918447863012461471}
-  - {fileID: 7498878576575627694}
-  - {fileID: 6921724958758911595}
-  - {fileID: 1157540546573194897}
-  - {fileID: 7933930583290514308}
-  selectedIndex: 3
-  allItems:
-  - {fileID: 11400000, guid: 1aac73748c898a8429c4743d83d8b6f9, type: 2}
 --- !u!1 &7272313783189037911
 GameObject:
   m_ObjectHideFlags: 0
