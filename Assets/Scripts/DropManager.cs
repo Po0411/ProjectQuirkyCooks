@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using Unity.Netcode;
 
@@ -8,7 +9,7 @@ public class DropManager : NetworkBehaviour
     public Transform dropPoint;
 
     [Header("Drop Settings")]
-    public Vector3 dropOffset = new Vector3(0, 1.2f, 0.6f); // 플레이어 앞 중앙
+    public Vector3 dropOffset = new Vector3(0, 1.2f, 0.6f); // 중앙 앞쪽
     public float forwardForce = 2f;
     public float upwardForce = 3f;
     public float lifetime = 30f;
@@ -26,7 +27,6 @@ public class DropManager : NetworkBehaviour
                 return;
             }
 
-            // 인벤토리에서 제거
             bool removed = inventory.RemoveItem(item, 1);
             if (!removed)
             {
@@ -42,11 +42,10 @@ public class DropManager : NetworkBehaviour
     [ServerRpc]
     private void DropItemServerRpc(string itemName, ServerRpcParams rpcParams = default)
     {
-        // InventoryManager에서 아이템 데이터 가져오기
         ItemData item = inventory.GetItemByName(itemName);
         if (item == null || item.worldPrefab == null)
         {
-            Debug.LogError($"❌ {itemName} worldPrefab이 null 입니다.");
+            Debug.LogError($"❌ {itemName} worldPrefab이 null 입니다. ItemData를 확인하세요.");
             return;
         }
 
@@ -56,17 +55,14 @@ public class DropManager : NetworkBehaviour
                                dropPoint.up * dropOffset.y +
                                dropPoint.right * dropOffset.x;
 
-        // 오브젝트 생성
         GameObject obj = Instantiate(item.worldPrefab, dropPosition, Quaternion.identity);
 
-        // ItemPickup에 데이터 연결
+        // 아이템 데이터 연결
         ItemPickup pickup = obj.GetComponent<ItemPickup>();
         if (pickup != null)
-        {
             pickup.itemData = item;
-        }
 
-        // Rigidbody 물리 효과
+        // 물리 반동 적용
         Rigidbody rb = obj.GetComponent<Rigidbody>();
         if (rb != null)
         {
@@ -74,18 +70,25 @@ public class DropManager : NetworkBehaviour
             rb.AddForce(throwDirection, ForceMode.Impulse);
         }
 
-        // 네트워크 스폰
+        // 네트워크 오브젝트 스폰
         NetworkObject netObj = obj.GetComponent<NetworkObject>();
         if (netObj != null)
         {
-            netObj.Spawn(true);
+            if (!netObj.IsSpawned)
+            {
+                netObj.Spawn(true);
+            }
+            else
+            {
+                Debug.LogWarning("⚠ 이미 스폰된 NetworkObject 입니다.");
+            }
         }
         else
         {
-            Debug.LogError($"⚠️ {itemName} 프리팹에 NetworkObject가 없습니다!");
+            Debug.LogError("❌ worldPrefab에 NetworkObject가 없습니다!");
         }
 
-        // 일정 시간 후 파괴
+        // 일정 시간 후 자동 삭제
         StartCoroutine(DestroyAfterLifetime(obj, lifetime));
     }
 
