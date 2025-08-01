@@ -13628,7 +13628,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemPrefabs:
   - {fileID: 458683740065219655, guid: 95538d08474baaa4ca4bfdc68ac76622, type: 3}
+  - {fileID: 1055295404968815001, guid: b62cc339c44803647a59f13feaffe79f, type: 3}
   - {fileID: 2920744845051637877, guid: c34dd7ee346c9414e9718c7c0d91b1b5, type: 3}
+  - {fileID: 114971075922788059, guid: 229deaee3ae106d4580256a372bcccc5, type: 3}
+  - {fileID: 1372295468562317392, guid: 675dd37dc6ec9fa4fbb18878a0b23286, type: 3}
+  - {fileID: 1636329165226476837, guid: 3e94e7bb3c8f188479970bfce4d78b5b, type: 3}
   center: {x: 0, y: 0.54, z: 15.03}
   size: {x: 10, y: 1, z: 10}
   spawnCount: 50
