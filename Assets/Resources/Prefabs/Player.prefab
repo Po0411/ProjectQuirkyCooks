@@ -108,6 +108,7 @@ MonoBehaviour:
   maxStamina: 10
   staminaDrain: 2
   staminaRegen: 1
+  playerPanelPrefab: {fileID: 281989079749131370, guid: ba6575ae10f21c04da387cdc69e25bb8, type: 3}
   playerCamera: {fileID: 4964120093976857778}
 --- !u!114 &746104187842417219
 MonoBehaviour:
@@ -183,7 +184,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5384465c028122a429075052d2e49f4f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inventoryUIPrefab: {fileID: 4469741648042572781, guid: f945603d567904342a77ba5cfda3a96f, type: 3}
+  inventoryUIPrefab: {fileID: 6212001468126609009, guid: 22dc35dd8d1134747bdb61700c2e5b4f, type: 3}
 --- !u!114 &4662897012271481169
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -1,73 +1,96 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+ï»¿using UnityEngine;
 using Unity.Netcode;
+using UnityEngine.UI;
 
 [RequireComponent(typeof(CharacterController))]
 public class PlayerController : NetworkBehaviour
 {
-    [Header("ÀÌµ¿ ¼³Á¤")]
+    [Header("ì´ë™ ì„¤ì •")]
     public float walkSpeed = 5f;
     public float runSpeed = 8f;
     public float jumpHeight = 1.2f;
     public float gravity = -9.81f;
 
-    [Header("½ºÅÂ¹Ì³ª")]
+    [Header("ìŠ¤íƒœë¯¸ë‚˜")]
     public float stamina = 10f;
     public float maxStamina = 10f;
     public float staminaDrain = 2f;
     public float staminaRegen = 1f;
 
-    [Header("Ä«¸Ş¶ó")]
-    public Camera playerCamera; // ÇÁ¸®ÆÕÀÇ ÀÚ½Ä Ä«¸Ş¶ó ¿¬°á
+    [Header("UI Prefabs")]
+    public GameObject playerInformationCanvasPrefab;
+
+    private Slider staminaGauge;
+    private Image staminaFill;
+
+    [Header("ì¹´ë©”ë¼")]
+    public Camera playerCamera;
 
     private CharacterController controller;
     private Vector3 velocity;
     private bool isGrounded;
 
+    private Color fullColor = new Color(0.2f, 0.7f, 1f); // íŒŒë‘
+    private Color emptyColor = new Color(1f, 0.2f, 0.2f); // ë¹¨ê°•
+
     void Start()
     {
         controller = GetComponent<CharacterController>();
 
-        // ³» Ä³¸¯ÅÍ°¡ ¾Æ´Ï¶ó¸é Á¶ÀÛ ºÒ°¡ + Ä«¸Ş¶ó ²¨¹ö¸²
         if (!IsOwner)
         {
             if (playerCamera != null)
                 playerCamera.gameObject.SetActive(false);
-
             enabled = false;
             return;
         }
 
         if (playerCamera != null)
             playerCamera.gameObject.SetActive(true);
+
+        // âœ… PlayerInformationCanvas ìƒì„±
+        if (playerInformationCanvasPrefab != null)
+        {
+            GameObject infoCanvas = Instantiate(playerInformationCanvasPrefab);
+            infoCanvas.transform.SetParent(GameObject.Find("Canvas").transform, false);
+
+            staminaGauge = infoCanvas.GetComponentInChildren<Slider>(true);
+            if (staminaGauge != null)
+                staminaFill = staminaGauge.fillRect.GetComponent<Image>();
+        }
+        else
+        {
+            Debug.LogError("âŒ PlayerInformationCanvas Prefabì´ Inspectorì— ì—°ê²°ë˜ì§€ ì•Šì•˜ìŠµë‹ˆë‹¤.");
+        }
     }
 
     void Update()
     {
-        if (!IsOwner) return; // ³» Ä³¸¯ÅÍ¸¸ Á¶ÀÛ
+        if (!IsOwner) return;
 
+        // ì´ë™ ì²˜ë¦¬
         isGrounded = controller.isGrounded;
         if (isGrounded && velocity.y < 0)
             velocity.y = -2f;
 
         float x = Input.GetAxis("Horizontal");
         float z = Input.GetAxis("Vertical");
-
         Vector3 move = transform.right * x + transform.forward * z;
+
         float currentSpeed = walkSpeed;
 
-        if (Input.GetKey(KeyCode.LeftShift) && stamina > 0)
+        if (Input.GetKey(KeyCode.LeftShift) && stamina > 0 && move.magnitude > 0)
         {
             currentSpeed = runSpeed;
             stamina -= staminaDrain * Time.deltaTime;
+            if (stamina < 0) stamina = 0;
         }
         else
         {
             stamina += staminaRegen * Time.deltaTime;
+            if (stamina > maxStamina) stamina = maxStamina;
         }
 
-        stamina = Mathf.Clamp(stamina, 0, maxStamina);
         controller.Move(move * currentSpeed * Time.deltaTime);
 
         if (Input.GetButtonDown("Jump") && isGrounded)
@@ -77,5 +100,15 @@ public class PlayerController : NetworkBehaviour
 
         velocity.y += gravity * Time.deltaTime;
         controller.Move(velocity * Time.deltaTime);
+
+        // âœ… ìŠ¤íƒœë¯¸ë‚˜ UI ê°±ì‹ 
+        if (staminaGauge != null)
+        {
+            float ratio = stamina / maxStamina;
+            staminaGauge.value = ratio;
+
+            if (staminaFill != null)
+                staminaFill.color = Color.Lerp(emptyColor, fullColor, ratio);
+        }
     }
 }
