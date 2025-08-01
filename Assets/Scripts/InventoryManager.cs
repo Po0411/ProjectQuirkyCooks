@@ -10,13 +10,13 @@ public class InventoryManager : NetworkBehaviour
 
     void Start()
     {
-        if (IsOwner)
+        if (IsOwner && slots != null && slots.Length > 0)
             UpdateSlotHighlight();
     }
 
     void Update()
     {
-        if (!IsOwner) return;
+        if (!IsOwner || slots == null) return;
 
         float scroll = Input.GetAxis("Mouse ScrollWheel");
         if (scroll > 0f)
@@ -31,22 +31,20 @@ public class InventoryManager : NetworkBehaviour
         }
     }
 
-    // 슬롯 하이라이트
     public void UpdateSlotHighlight()
     {
         for (int i = 0; i < slots.Length; i++)
             slots[i].SetSelected(i == selectedIndex);
     }
 
-    // 현재 선택된 아이템
     public ItemData GetSelectedItem()
     {
+        if (slots == null || slots.Length == 0) return null;
         if (selectedIndex >= 0 && selectedIndex < slots.Length)
             return slots[selectedIndex].GetCurrentItem();
         return null;
     }
 
-    // 아이템 추가 (로컬)
     public bool AddItemLocal(ItemData newItem)
     {
         foreach (var slot in slots)
@@ -68,7 +66,6 @@ public class InventoryManager : NetworkBehaviour
         return false;
     }
 
-    // 아이템 제거 (로컬)
     public bool RemoveItem(ItemData item, int amount)
     {
         foreach (var slot in slots)
@@ -82,7 +79,6 @@ public class InventoryManager : NetworkBehaviour
         return false;
     }
 
-    // 이름으로 아이템 찾기
     public ItemData GetItemByName(string itemName)
     {
         foreach (var item in allItems)
@@ -92,5 +88,13 @@ public class InventoryManager : NetworkBehaviour
         }
         Debug.LogError($"❌ {itemName} 아이템을 allItems에서 찾을 수 없음");
         return null;
+    }
+
+    // PlayerInventoryUI에서 슬롯 초기화
+    public void InitializeSlots(InventorySlot[] newSlots)
+    {
+        slots = newSlots;
+        selectedIndex = 0;
+        UpdateSlotHighlight();
     }
 }

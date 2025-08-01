@@ -1,80 +1,109 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using TMPro;
+﻿using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine;
+using TMPro;
 
 public class InventorySlot : MonoBehaviour
 {
-    [Header("UI Components")]
-    public Image backgroundImage;
-    public Image itemImage;
-    public TextMeshProUGUI amountText;
+    [Header("UI 참조")]
+    public Image icon;                  // 아이템 아이콘
+    public TextMeshProUGUI countText;   // 아이템 수량
+    public Image background;            // 슬롯 배경
 
     [Header("Background Sprites")]
-    public Sprite normalBackground;
-    public Sprite selectedBackground;
+    public Sprite normalBackground;     // 기본 흰색
+    public Sprite selectedBackground;   // 선택 노란색
 
     private ItemData currentItem;
-    private int itemCount = 0;
+    private int count = 0;
+    private const int maxStack = 4;
+    private bool isSelected = false;
 
     void Awake()
     {
-        itemImage.sprite = null;
-        itemImage.gameObject.SetActive(false);
+        if (background != null && normalBackground != null)
+            background.sprite = normalBackground;
 
-        itemCount = 0;
-        UpdateText(); // 꼭 유지
+        if (icon != null)
+            icon.enabled = false;
     }
 
-    public void SetItem(ItemData item)
+    public void SetItem(ItemData newItem)
     {
-        currentItem = item;
-        itemCount = 1;
+        if (icon == null || countText == null || background == null)
+        {
+            Debug.LogError("❌ InventorySlot UI 참조 누락 (Inspector 연결 확인)");
+            return;
+        }
 
-        itemImage.sprite = item.icon;
-        itemImage.gameObject.SetActive(true);
-        UpdateText();
+        currentItem = newItem;
+        count = 1;
+
+        icon.sprite = newItem.icon;
+        icon.enabled = true;
+
+        Refresh();
     }
 
     public void AddCount()
     {
-        itemCount++;
-        UpdateText();
+        count++;
+        Refresh();
     }
 
-    public void RemoveCount(int count = 1)
+    public void RemoveCount(int amount)
     {
-        itemCount = Mathf.Max(0, itemCount - count);
-        if (itemCount == 0)
-            ClearSlot();
+        count -= amount;
+        if (count <= 0)
+        {
+            Clear();
+        }
         else
-            UpdateText();
+        {
+            Refresh();
+        }
     }
 
-    public void ClearSlot()
+    public void Clear()
     {
         currentItem = null;
-        itemCount = 0;
+        count = 0;
 
-        itemImage.sprite = null;
-        itemImage.gameObject.SetActive(false);
-        UpdateText(); // 반드시 유지
-    }
+        if (icon != null)
+        {
+            icon.sprite = null;
+            icon.enabled = false;
+        }
 
-    public void SetSelected(bool isSelected)
-    {
-        backgroundImage.sprite = isSelected ? selectedBackground : normalBackground;
+        if (countText != null)
+            countText.text = "x0";
+
+        // 선택 여부에 따라 배경 유지
+        UpdateBackground();
     }
 
     public bool IsEmpty() => currentItem == null;
-    public bool Matches(ItemData item) => currentItem == item;
-    public bool IsFull() => currentItem != null && itemCount >= currentItem.maxStack;
-    public int GetCount() => itemCount;
+    public bool IsFull() => currentItem != null && count >= maxStack;
+    public bool Matches(ItemData item) => currentItem != null && currentItem == item;
+    public int GetCount() => count;
     public ItemData GetCurrentItem() => currentItem;
 
-    private void UpdateText()
+    public void SetSelected(bool selected)
     {
-        amountText.text = "x" + itemCount;
+        isSelected = selected;
+        UpdateBackground();
+    }
+
+    private void UpdateBackground()
+    {
+        if (background != null)
+        {
+            background.sprite = isSelected ? selectedBackground : normalBackground;
+        }
+    }
+
+    private void Refresh()
+    {
+        if (countText != null)
+            countText.text = "x" + count;
     }
 }
