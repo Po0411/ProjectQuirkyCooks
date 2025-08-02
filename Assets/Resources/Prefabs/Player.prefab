@@ -108,7 +108,7 @@ MonoBehaviour:
   maxStamina: 10
   staminaDrain: 2
   staminaRegen: 1
-  playerPanelPrefab: {fileID: 281989079749131370, guid: ba6575ae10f21c04da387cdc69e25bb8, type: 3}
+  playerInformationCanvasPrefab: {fileID: 281989079749131370, guid: ba6575ae10f21c04da387cdc69e25bb8, type: 3}
   playerCamera: {fileID: 4964120093976857778}
 --- !u!114 &746104187842417219
 MonoBehaviour:

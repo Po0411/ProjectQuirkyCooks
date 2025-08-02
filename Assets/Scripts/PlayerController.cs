@@ -11,7 +11,7 @@ public class PlayerController : NetworkBehaviour
     public float jumpHeight = 1.2f;
     public float gravity = -9.81f;
 
-    [Header("스태미나")]
+    [Header("스태미나 설정")]
     public float stamina = 10f;
     public float maxStamina = 10f;
     public float staminaDrain = 2f;
@@ -20,8 +20,7 @@ public class PlayerController : NetworkBehaviour
     [Header("UI Prefabs")]
     public GameObject playerInformationCanvasPrefab;
 
-    private Slider staminaGauge;
-    private Image staminaFill;
+    private Image staminaBar; // Slider 대신 Image
 
     [Header("카메라")]
     public Camera playerCamera;
@@ -29,9 +28,6 @@ public class PlayerController : NetworkBehaviour
     private CharacterController controller;
     private Vector3 velocity;
     private bool isGrounded;
-
-    private Color fullColor = new Color(0.2f, 0.7f, 1f); // 파랑
-    private Color emptyColor = new Color(1f, 0.2f, 0.2f); // 빨강
 
     void Start()
     {
@@ -48,19 +44,21 @@ public class PlayerController : NetworkBehaviour
         if (playerCamera != null)
             playerCamera.gameObject.SetActive(true);
 
-        // ✅ PlayerInformationCanvas 생성
+        // PlayerInformationCanvas 생성
         if (playerInformationCanvasPrefab != null)
         {
             GameObject infoCanvas = Instantiate(playerInformationCanvasPrefab);
             infoCanvas.transform.SetParent(GameObject.Find("Canvas").transform, false);
 
-            staminaGauge = infoCanvas.GetComponentInChildren<Slider>(true);
-            if (staminaGauge != null)
-                staminaFill = staminaGauge.fillRect.GetComponent<Image>();
-        }
-        else
-        {
-            Debug.LogError("❌ PlayerInformationCanvas Prefab이 Inspector에 연결되지 않았습니다.");
+            var staminaObj = infoCanvas.transform.Find("PlayerInformationPanel/PlayerHp-Stamina/StaminaGauge");
+            if (staminaObj != null)
+            {
+                staminaBar = staminaObj.GetComponent<Image>();
+            }
+            else
+            {
+                Debug.LogError("❌ StaminaGauge에서 Image를 찾을 수 없음");
+            }
         }
     }
 
@@ -68,7 +66,6 @@ public class PlayerController : NetworkBehaviour
     {
         if (!IsOwner) return;
 
-        // 이동 처리
         isGrounded = controller.isGrounded;
         if (isGrounded && velocity.y < 0)
             velocity.y = -2f;
@@ -79,7 +76,10 @@ public class PlayerController : NetworkBehaviour
 
         float currentSpeed = walkSpeed;
 
-        if (Input.GetKey(KeyCode.LeftShift) && stamina > 0 && move.magnitude > 0)
+        bool wantsToRun = Input.GetKey(KeyCode.LeftShift) && move.magnitude > 0;
+        bool hasStamina = stamina > 0.1f;
+
+        if (wantsToRun && hasStamina)
         {
             currentSpeed = runSpeed;
             stamina -= staminaDrain * Time.deltaTime;
@@ -87,6 +87,7 @@ public class PlayerController : NetworkBehaviour
         }
         else
         {
+            currentSpeed = walkSpeed;
             stamina += staminaRegen * Time.deltaTime;
             if (stamina > maxStamina) stamina = maxStamina;
         }
@@ -94,21 +95,15 @@ public class PlayerController : NetworkBehaviour
         controller.Move(move * currentSpeed * Time.deltaTime);
 
         if (Input.GetButtonDown("Jump") && isGrounded)
-        {
             velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
-        }
 
         velocity.y += gravity * Time.deltaTime;
         controller.Move(velocity * Time.deltaTime);
 
-        // ✅ 스태미나 UI 갱신
-        if (staminaGauge != null)
+        // ✅ Image.fillAmount로 UI 갱신
+        if (staminaBar != null)
         {
-            float ratio = stamina / maxStamina;
-            staminaGauge.value = ratio;
-
-            if (staminaFill != null)
-                staminaFill.color = Color.Lerp(emptyColor, fullColor, ratio);
+            staminaBar.fillAmount = stamina / maxStamina;
         }
     }
 }
