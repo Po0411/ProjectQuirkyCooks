@@ -4,13 +4,26 @@ using Unity.Netcode;
 
 public class DropManager : NetworkBehaviour
 {
+    public InventoryManager inventory;
     public Transform dropPoint;
 
     [Header("Drop Settings")]
-    public Vector3 dropOffset = new Vector3(0, 1.2f, 0.6f);
-    public float throwForce = 8f;
-    public float upwardForce = 5f;
+    public Vector3 dropOffset = new Vector3(0, 0.5f, 1f); // 앞쪽으로
+    public float forwardForce = 6f;   // 앞으로 더 강하게
+    public float upwardForce = 4f;    // 위쪽 힘
     public float lifetime = 30f;
+
+    void Start()
+    {
+        // dropPoint가 설정 안 되어 있으면 카메라 앞쪽 기준으로 자동 설정
+        if (dropPoint == null && Camera.main != null)
+        {
+            GameObject dp = new GameObject("DropPoint");
+            dp.transform.SetParent(Camera.main.transform);
+            dp.transform.localPosition = new Vector3(0, -0.2f, 0.8f); // 카메라 앞쪽
+            dropPoint = dp.transform;
+        }
+    }
 
     void Update()
     {
@@ -18,78 +31,61 @@ public class DropManager : NetworkBehaviour
 
         if (Input.GetKeyDown(KeyCode.Q))
         {
-            var inv = GetComponent<InventoryManager>();
-            if (inv == null) return;
+            if (inventory == null)
+            {
+                Debug.LogError("❌ InventoryManager 없음");
+                return;
+            }
 
-            ItemData item = inv.GetSelectedItem();
+            ItemData item = inventory.GetSelectedItem();
             if (item == null)
             {
-                Debug.Log("⚠ 선택된 아이템 없음");
+                Debug.Log("❌ 선택된 아이템이 없음");
                 return;
             }
 
-            bool removed = inv.RemoveItem(item, 1);
-            if (!removed)
+            if (!inventory.RemoveItem(item, 1))
             {
-                Debug.Log("⚠ 아이템 제거 실패");
+                Debug.Log("❌ 인벤토리에서 아이템 제거 실패");
                 return;
             }
 
-            Debug.Log($"✅ {item.itemName} 드랍 요청");
-            SpawnDropServerRpc(item.itemName, dropPoint.position, dropPoint.forward);
+            DropItemServerRpc(item.itemName);
         }
     }
 
-    [ServerRpc(RequireOwnership = false)]
-    private void SpawnDropServerRpc(string itemName, Vector3 origin, Vector3 forward, ServerRpcParams rpcParams = default)
+    [ServerRpc]
+    private void DropItemServerRpc(string itemName, ServerRpcParams rpcParams = default)
     {
-        ulong senderId = rpcParams.Receive.SenderClientId;
-
-        if (!NetworkManager.Singleton.ConnectedClients.TryGetValue(senderId, out var client))
-        {
-            Debug.LogError($"❌ {senderId} 클라이언트를 찾을 수 없음");
-            return;
-        }
-
-        var player = client.PlayerObject;
-        if (player == null)
-        {
-            Debug.LogError("❌ PlayerObject 없음");
-            return;
-        }
-
-        var inv = player.GetComponent<InventoryManager>();
-        ItemData item = inv.GetItemByName(itemName);
-
+        ItemData item = inventory.GetItemByName(itemName);
         if (item == null || item.worldPrefab == null)
         {
-            Debug.LogError($"❌ {itemName} worldPrefab 없음");
+            Debug.LogError($"❌ {itemName} worldPrefab이 null 입니다.");
             return;
         }
 
-        Vector3 dropPosition = origin +
-                               forward * dropOffset.z +
-                               Vector3.up * dropOffset.y;
+        Vector3 dropPosition = dropPoint.position + dropPoint.forward * dropOffset.z;
 
         GameObject obj = Instantiate(item.worldPrefab, dropPosition, Quaternion.identity);
 
-        var pickup = obj.GetComponent<ItemPickup>();
+        ItemPickup pickup = obj.GetComponent<ItemPickup>();
         if (pickup != null)
             pickup.itemData = item;
 
-        var rb = obj.GetComponent<Rigidbody>();
+        Rigidbody rb = obj.GetComponent<Rigidbody>();
         if (rb != null)
         {
-            rb.useGravity = true;
             rb.isKinematic = false;
+            rb.useGravity = true;
+            rb.velocity = Vector3.zero; // 초기 속도 초기화
 
-            Vector3 throwDir = (forward * throwForce) + (Vector3.up * upwardForce);
+            // 던지는 방향
+            Vector3 throwDir = dropPoint.forward * forwardForce + Vector3.up * upwardForce;
             rb.AddForce(throwDir, ForceMode.Impulse);
-            rb.AddTorque(Random.insideUnitSphere * 5f, ForceMode.Impulse);
         }
 
-        var netObj = obj.GetComponent<NetworkObject>();
-        if (netObj != null && !netObj.IsSpawned)
+        NetworkObject netObj = obj.GetComponent<NetworkObject>();
+        if (netObj != null)
             netObj.Spawn(true);
 
         StartCoroutine(DestroyAfterLifetime(obj, lifetime));
