@@ -81,7 +81,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 842722378
+  GlobalObjectIdHash: 771052439
   InScenePlacedSourceGlobalObjectIdHash: 0
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -232,7 +232,7 @@ MonoBehaviour:
   interactLayer:
     serializedVersion: 2
     m_Bits: 128
-  interactText: {fileID: 3772304485138212693}
+  interactTextUI: {fileID: 3772304485138212693}
 --- !u!1 &1897970633719153739
 GameObject:
   m_ObjectHideFlags: 0
@@ -347,7 +347,7 @@ GameObject:
   - component: {fileID: 3707695174156473700}
   - component: {fileID: 3772304485138212693}
   m_Layer: 0
-  m_Name: Text (TMP)
+  m_Name: InteractText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

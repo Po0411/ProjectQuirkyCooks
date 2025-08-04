@@ -1,44 +1,52 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using TMPro;
 
 public class PlayerInteract : MonoBehaviour
 {
-    public float interactRange = 3f;               // »óÈ£ÀÛ¿ë °Å¸®
-    public LayerMask interactLayer;                // »óÈ£ÀÛ¿ë °¡´ÉÇÑ ¿ÀºêÁ§Æ® ·¹ÀÌ¾î
-    public TextMeshProUGUI interactText;           // È­¸é Áß¾Ó ÅØ½ºÆ® (¿¹: "¡Ü ½ä±â")
+    [Header("ìƒí˜¸ì‘ìš© ì„¤ì •")]
+    public float interactRange = 5f;
+    public LayerMask interactLayer;
+    public TextMeshProUGUI interactTextUI;
+
+    private IInteractable currentInteractable;
 
     void Update()
     {
-        if (interactText != null)
-            interactText.text = ""; // ±âº»ÀûÀ¸·Î ¼û±è
-
+        // Ray ìƒì„±
         Ray ray = new Ray(Camera.main.transform.position, Camera.main.transform.forward);
 
         if (Physics.Raycast(ray, out RaycastHit hit, interactRange, interactLayer))
         {
-            var interactable = hit.collider.GetComponent<IInteractable>();
-            if (interactable != null)
-            {
-                // ÀÎÅÍ·¢Æ® ÅØ½ºÆ® Ç¥½Ã
-                if (interactText != null)
-                    interactText.text = "¡Ü " + interactable.GetInteractText();
+            currentInteractable = hit.collider.GetComponent<IInteractable>();
 
-                // Å¬¸¯ ½Ã »óÈ£ÀÛ¿ë
+            if (currentInteractable != null)
+            {
+                // UI í‘œì‹œ
+                interactTextUI.gameObject.SetActive(true);
+                interactTextUI.text = currentInteractable.GetInteractText();
+
+                // ì¢Œí´ë¦­ ì‹œ ìƒí˜¸ì‘ìš©
                 if (Input.GetMouseButtonDown(0))
                 {
                     InventoryManager inv = FindObjectOfType<InventoryManager>();
-                    if (inv != null)
-                    {
-                        // InventoryManager ÀÖ´Â ¹öÀü »ç¿ë
-                        interactable.Interact(inv);
-                    }
-                    else
-                    {
-                        // ¾øÀ¸¸é ÆÄ¶ó¹ÌÅÍ ¾ø´Â ¹öÀü È£Ãâ
-                        interactable.Interact();
-                    }
+                    currentInteractable.Interact(inv);
                 }
             }
+            else
+            {
+                HideText();
+            }
         }
+        else
+        {
+            HideText();
+        }
+    }
+
+    void HideText()
+    {
+        if (interactTextUI != null)
+            interactTextUI.gameObject.SetActive(false);
+        currentInteractable = null;
     }
 }

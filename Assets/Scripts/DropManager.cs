@@ -15,7 +15,11 @@ public class DropManager : NetworkBehaviour
 
     void Start()
     {
-        // dropPoint가 설정 안 되어 있으면 카메라 앞쪽 기준으로 자동 설정
+        // InventoryManager 자동 할당
+        if (inventory == null)
+            inventory = GetComponent<InventoryManager>();
+
+        // dropPoint가 설정 안 되어 있으면 카메라 앞쪽 기준으로 자동 생성
         if (dropPoint == null && Camera.main != null)
         {
             GameObject dp = new GameObject("DropPoint");
@@ -44,7 +48,7 @@ public class DropManager : NetworkBehaviour
                 return;
             }
 
-            if (!inventory.RemoveItem(item, 1))
+            if (!inventory.RemoveItemLocal(item, 1))
             {
                 Debug.Log("❌ 인벤토리에서 아이템 제거 실패");
                 return;
@@ -57,6 +61,12 @@ public class DropManager : NetworkBehaviour
     [ServerRpc]
     private void DropItemServerRpc(string itemName, ServerRpcParams rpcParams = default)
     {
+        if (inventory == null)
+        {
+            Debug.LogError("❌ DropItemServerRpc - InventoryManager 없음");
+            return;
+        }
+
         ItemData item = inventory.GetItemByName(itemName);
         if (item == null || item.worldPrefab == null)
         {
@@ -79,7 +89,7 @@ public class DropManager : NetworkBehaviour
             rb.useGravity = true;
             rb.velocity = Vector3.zero; // 초기 속도 초기화
 
-            // 던지는 방향
+            // 포물선으로 던지는 힘
             Vector3 throwDir = dropPoint.forward * forwardForce + Vector3.up * upwardForce;
             rb.AddForce(throwDir, ForceMode.Impulse);
         }

@@ -466,7 +466,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9a4ace54cb702042b38cd98e51ad422, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 2
+  type: 0
   requiredItemName: "\uC0AC\uACFC"
   resultItemName: "\uC591\uBC30\uCD94"
 --- !u!65 &3835005946839172553
@@ -484,12 +484,12 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0.81}
+  m_Center: {x: 0, y: 0, z: 1.2}
 --- !u!1 &5307874319330944110
 GameObject:
   m_ObjectHideFlags: 0

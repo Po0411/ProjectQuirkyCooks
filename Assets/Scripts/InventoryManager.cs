@@ -45,9 +45,7 @@ public class InventoryManager : NetworkBehaviour
         return null;
     }
 
-    // ----------------------------
-    // 로컬 전용 처리
-    // ----------------------------
+    // ---------------- 로컬 전용 ----------------
     public bool AddItemLocal(ItemData newItem)
     {
         foreach (var slot in slots)
@@ -66,7 +64,6 @@ public class InventoryManager : NetworkBehaviour
                 return true;
             }
         }
-        Debug.Log("❌ 인벤토리 가득 참");
         return false;
     }
 
@@ -83,19 +80,11 @@ public class InventoryManager : NetworkBehaviour
         return false;
     }
 
-    // DropManager 등에서 쓰기 편하도록 래퍼
-    public bool RemoveItem(ItemData item, int amount)
-    {
-        return RemoveItemLocal(item, amount);
-    }
-
-    // ----------------------------
-    // 네트워크 동기화
-    // ----------------------------
+    // ---------------- 네트워크 반영 ----------------
     [ClientRpc]
     public void AddItemClientRpc(string itemName)
     {
-        ItemData item = GetItemByName(itemName);
+        var item = GetItemByName(itemName);
         if (item != null)
             AddItemLocal(item);
     }
@@ -103,51 +92,12 @@ public class InventoryManager : NetworkBehaviour
     [ClientRpc]
     public void RemoveItemClientRpc(string itemName, int amount)
     {
-        ItemData item = GetItemByName(itemName);
+        var item = GetItemByName(itemName);
         if (item != null)
             RemoveItemLocal(item, amount);
     }
 
-    [ServerRpc(RequireOwnership = false)]
-    public void RequestAddItemServerRpc(string itemName, ServerRpcParams rpcParams = default)
-    {
-        ulong senderId = rpcParams.Receive.SenderClientId;
-        if (!NetworkManager.Singleton.ConnectedClients.TryGetValue(senderId, out var client))
-            return;
-
-        var player = client.PlayerObject;
-        var inv = player.GetComponent<InventoryManager>();
-        if (inv == null) return;
-
-        ItemData item = inv.GetItemByName(itemName);
-        if (item != null)
-        {
-            inv.AddItemLocal(item);
-            inv.AddItemClientRpc(itemName);
-        }
-    }
-
-    [ServerRpc(RequireOwnership = false)]
-    public void RequestRemoveItemServerRpc(string itemName, int amount, ServerRpcParams rpcParams = default)
-    {
-        ulong senderId = rpcParams.Receive.SenderClientId;
-        if (!NetworkManager.Singleton.ConnectedClients.TryGetValue(senderId, out var client))
-            return;
-
-        var player = client.PlayerObject;
-        var inv = player.GetComponent<InventoryManager>();
-        if (inv == null) return;
-
-        ItemData item = inv.GetItemByName(itemName);
-        if (item != null && inv.RemoveItemLocal(item, amount))
-        {
-            inv.RemoveItemClientRpc(itemName, amount);
-        }
-    }
-
-    // ----------------------------
-    // 유틸리티
-    // ----------------------------
+    // ---------------- 데이터 조회 ----------------
     public ItemData GetItemByName(string itemName)
     {
         foreach (var item in allItems)
