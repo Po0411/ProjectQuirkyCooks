@@ -18,6 +18,7 @@ public class InventoryManager : NetworkBehaviour
     {
         if (!IsOwner || slots == null) return;
 
+        // 마우스 스크롤 이동
         float scroll = Input.GetAxis("Mouse ScrollWheel");
         if (scroll > 0f)
         {
@@ -28,6 +29,17 @@ public class InventoryManager : NetworkBehaviour
         {
             selectedIndex = (selectedIndex - 1 + slots.Length) % slots.Length;
             UpdateSlotHighlight();
+        }
+
+        // 숫자키(1~슬롯 수)로 직접 선택
+        for (int i = 0; i < slots.Length; i++)
+        {
+            // KeyCode.Alpha1 은 숫자 '1' 키
+            if (Input.GetKeyDown(KeyCode.Alpha1 + i))
+            {
+                selectedIndex = i;
+                UpdateSlotHighlight();
+            }
         }
     }
 

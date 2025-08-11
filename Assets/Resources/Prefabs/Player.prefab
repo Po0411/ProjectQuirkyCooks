@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 1142287481396581762}
   - component: {fileID: 7393715956100139065}
   - component: {fileID: 1348978739420986474}
-  - component: {fileID: 746104187842417219}
   - component: {fileID: 8748821626916083658}
   - component: {fileID: 3283239486347669983}
   - component: {fileID: 6119879988398488863}
@@ -41,6 +40,7 @@ Transform:
   - {fileID: 7153876016813688306}
   - {fileID: 6370123958383839450}
   - {fileID: 2002299079021205740}
+  - {fileID: 1603418917854957062}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!143 &1142287481396581762
@@ -112,24 +112,6 @@ MonoBehaviour:
   staminaRegen: 1
   playerInformationCanvasPrefab: {fileID: 281989079749131370, guid: ba6575ae10f21c04da387cdc69e25bb8, type: 3}
   playerCamera: {fileID: 4964120093976857778}
---- !u!114 &746104187842417219
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1056964343921413429}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3501c9a0c7a315a48b2c3871ec86f430, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  inventory: {fileID: 4662897012271481169}
-  dropPoint: {fileID: 8556139372743554277}
-  dropOffset: {x: 0, y: 1.2, z: 0.6}
-  forwardForce: 5
-  upwardForce: 5
-  lifetime: 30
 --- !u!114 &8748821626916083658
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -335,6 +317,56 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!1 &2028740929131598724
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1603418917854957062}
+  - component: {fileID: 643468385152048885}
+  m_Layer: 0
+  m_Name: DropManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1603418917854957062
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2028740929131598724}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.0917, z: 0.0125}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8556139372743554277}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &643468385152048885
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2028740929131598724}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3501c9a0c7a315a48b2c3871ec86f430, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inventory: {fileID: 4662897012271481169}
+  dropPoint: {fileID: 1603418917854957062}
+  dropOffset: {x: 0, y: 0.5, z: 1}
+  forwardForce: 6
+  upwardForce: 4
+  lifetime: 30
 --- !u!1 &2202111872620815531
 GameObject:
   m_ObjectHideFlags: 0
