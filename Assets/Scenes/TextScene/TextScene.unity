@@ -6391,6 +6391,52 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5583030267628342256, guid: 2250b77b9dafc354b9ca6912b30e872d, type: 3}
   m_PrefabInstance: {fileID: 409773545}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &410995096
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 410995098}
+  - component: {fileID: 410995097}
+  m_Layer: 0
+  m_Name: NetworkPlayerSpawner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &410995097
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 410995096}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62d30c56d5c96994084dbbfe07ab18d2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameplaySceneName: GameMulti
+  playerPrefab: {fileID: 1056964343921413429, guid: b0027bf3e3efbe746be6d2794a24d324, type: 3}
+--- !u!4 &410995098
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 410995096}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &412188484
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -35211,3 +35257,4 @@ SceneRoots:
   - {fileID: 106931135}
   - {fileID: 1063401738}
   - {fileID: 964474228}
+  - {fileID: 410995098}
