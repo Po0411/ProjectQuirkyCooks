@@ -9,7 +9,7 @@ public class LobbyReadyManager : NetworkBehaviour
     public string lobbySceneName = "ChannelScene";
     public string gameplaySceneName = "GameMulti";
 
-    // 로비 준비 상태 항목
+    // 준비 상태 항목
     public struct Entry : INetworkSerializable, IEquatable<Entry>
     {
         public ulong ClientId;
@@ -30,7 +30,6 @@ public class LobbyReadyManager : NetworkBehaviour
 
     private NetworkList<Entry> _entries;
 
-    // ✅ NetworkList 그대로 노출 (인터페이스 캐스팅 하지 않음)
     public NetworkList<Entry> Entries => _entries;
 
     private void Awake()
@@ -38,42 +37,56 @@ public class LobbyReadyManager : NetworkBehaviour
         _entries = new NetworkList<Entry>();
     }
 
+    private void OnEnable()
+    {
+        // 네트워크 매니저 콜백을 미리 구독(호스트 초기 타이밍 커버)
+        if (NetworkManager.Singleton != null)
+        {
+            NetworkManager.Singleton.OnClientConnectedCallback += OnClientConnected;
+            NetworkManager.Singleton.OnClientDisconnectCallback += OnClientDisconnected;
+        }
+        SceneManager.activeSceneChanged += OnSceneChanged;
+    }
+
+    private void OnDisable()
+    {
+        if (NetworkManager.Singleton != null)
+        {
+            NetworkManager.Singleton.OnClientConnectedCallback -= OnClientConnected;
+            NetworkManager.Singleton.OnClientDisconnectCallback -= OnClientDisconnected;
+        }
+        SceneManager.activeSceneChanged -= OnSceneChanged;
+    }
+
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
 
-        _entries.OnListChanged += OnEntriesListChanged;
+        _entries.OnListChanged += _ => OnEntriesChanged?.Invoke();
 
+        // 어떤 순서여도 서버가 현재 접속자들을 채우도록 보장
         if (IsServer)
         {
-            // 현재 접속자 반영
-            foreach (var id in NetworkManager.ConnectedClientsIds)
-                AddOrUpdate(id, false);
-
-            NetworkManager.OnClientConnectedCallback += OnClientConnected;
-            NetworkManager.OnClientDisconnectCallback += OnClientDisconnected;
-            SceneManager.activeSceneChanged += OnSceneChanged;
+            SeedExistingClients();
         }
+
+        // 초기 UI 타이밍 보정: 클라에서도 한 번 갱신 이벤트 쏘아주기
+        OnEntriesChanged?.Invoke();
     }
 
     public override void OnNetworkDespawn()
     {
         base.OnNetworkDespawn();
-
-        if (_entries != null)
-            _entries.OnListChanged -= OnEntriesListChanged;
-
-        if (IsServer && NetworkManager != null)
-        {
-            NetworkManager.OnClientConnectedCallback -= OnClientConnected;
-            NetworkManager.OnClientDisconnectCallback -= OnClientDisconnected;
-            SceneManager.activeSceneChanged -= OnSceneChanged;
-        }
+        _entries.OnListChanged -= _ => OnEntriesChanged?.Invoke();
     }
 
-    private void OnEntriesListChanged(NetworkListEvent<Entry> _)
+    // ---- 서버 전용 헬퍼 ----
+    private void SeedExistingClients()
     {
-        OnEntriesChanged?.Invoke();
+        if (!IsServer || NetworkManager.Singleton == null) return;
+
+        foreach (var id in NetworkManager.Singleton.ConnectedClientsIds)
+            AddOrUpdate(id, false);
     }
 
     private void OnClientConnected(ulong clientId)
@@ -92,52 +105,9 @@ public class LobbyReadyManager : NetworkBehaviour
     private void OnSceneChanged(Scene from, Scene to)
     {
         if (!IsServer) return;
-        // 게임 씬 진입 시 초기화가 필요하면 아래 주석 해제
+        // 필요하면 게임 씬 진입 시 초기화
         // if (to.name == gameplaySceneName) _entries.Clear();
     }
-
-    // -------- Public API --------
-
-    public bool TryGetLocalReady(out bool ready)
-    {
-        var localId = NetworkManager.LocalClientId;
-        for (int i = 0; i < _entries.Count; i++)
-        {
-            if (_entries[i].ClientId == localId)
-            {
-                ready = _entries[i].Ready;
-                return true;
-            }
-        }
-        ready = false;
-        return false;
-    }
-
-    public int ReadyCount
-    {
-        get { int c = 0; for (int i = 0; i < _entries.Count; i++) if (_entries[i].Ready) c++; return c; }
-    }
-
-    public int TotalCount => _entries.Count;
-
-    public bool AllReady => (_entries.Count > 0) && (ReadyCount == _entries.Count);
-
-    // 클라이언트 → 서버: 내 준비 토글
-    public void ToggleReadyFromUI()
-    {
-        bool cur; TryGetLocalReady(out cur);
-        SetReadyServerRpc(!cur);
-    }
-
-    [ServerRpc(RequireOwnership = false)]
-    private void SetReadyServerRpc(bool ready, ServerRpcParams rpc = default)
-    {
-        var sender = rpc.Receive.SenderClientId;
-        AddOrUpdate(sender, ready);
-        TryStartGameIfAllReady();
-    }
-
-    // -------- Server helpers --------
 
     private void AddOrUpdate(ulong clientId, bool ready)
     {
@@ -182,4 +152,43 @@ public class LobbyReadyManager : NetworkBehaviour
 
     private bool IsInLobbyScene()
         => string.Equals(SceneManager.GetActiveScene().name, lobbySceneName, StringComparison.Ordinal);
+
+    // ---- 퍼블릭 API ----
+    public bool TryGetLocalReady(out bool ready)
+    {
+        var localId = NetworkManager.LocalClientId;
+        for (int i = 0; i < _entries.Count; i++)
+        {
+            if (_entries[i].ClientId == localId)
+            {
+                ready = _entries[i].Ready;
+                return true;
+            }
+        }
+        ready = false;
+        return false;
+    }
+
+    public int ReadyCount
+    {
+        get { int c = 0; for (int i = 0; i < _entries.Count; i++) if (_entries[i].Ready) c++; return c; }
+    }
+
+    public int TotalCount => _entries.Count;
+
+    public bool AllReady => (_entries.Count > 0) && (ReadyCount == _entries.Count);
+
+    public void ToggleReadyFromUI()
+    {
+        bool cur; TryGetLocalReady(out cur);
+        SetReadyServerRpc(!cur);
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void SetReadyServerRpc(bool ready, ServerRpcParams rpc = default)
+    {
+        var sender = rpc.Receive.SenderClientId;
+        AddOrUpdate(sender, ready);
+        TryStartGameIfAllReady();
+    }
 }
