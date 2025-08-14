@@ -1668,6 +1668,52 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 943854583}
   m_CullTransparentMesh: 1
+--- !u!1 &970295836
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 970295838}
+  - component: {fileID: 970295837}
+  m_Layer: 0
+  m_Name: NetworkPlayerSpawner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &970295837
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 970295836}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62d30c56d5c96994084dbbfe07ab18d2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameplaySceneName: TextScene
+  playerPrefab: {fileID: 1056964343921413429, guid: b0027bf3e3efbe746be6d2794a24d324, type: 3}
+--- !u!4 &970295838
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 970295836}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1029761490
 GameObject:
   m_ObjectHideFlags: 0
@@ -2870,6 +2916,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1167187383}
     m_Modifications:
+    - target: {fileID: 1143110312512376868, guid: 642eaee9c66549345a5f27c7802c8232, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: e168d17abb612524895e402c2000789c, type: 2}
+    - target: {fileID: 1143110312512376868, guid: 642eaee9c66549345a5f27c7802c8232, type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: -5689706547309439038, guid: e168d17abb612524895e402c2000789c, type: 2}
+    - target: {fileID: 1143110312512376868, guid: 642eaee9c66549345a5f27c7802c8232, type: 3}
+      propertyPath: m_hasFontAssetChanged
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1187341527982089329, guid: 642eaee9c66549345a5f27c7802c8232, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -3317,52 +3375,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1943299645}
   m_CullTransparentMesh: 1
---- !u!1 &1970202195
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1970202197}
-  - component: {fileID: 1970202196}
-  m_Layer: 0
-  m_Name: NetworkPlayerSpawner
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1970202196
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1970202195}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 62d30c56d5c96994084dbbfe07ab18d2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  gameplaySceneName: TextScene
-  playerPrefab: {fileID: 1056964343921413429, guid: b0027bf3e3efbe746be6d2794a24d324, type: 3}
---- !u!4 &1970202197
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1970202195}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2128711136
 GameObject:
   m_ObjectHideFlags: 0
@@ -3575,4 +3587,4 @@ SceneRoots:
   - {fileID: 315489507}
   - {fileID: 189953014}
   - {fileID: 1787066265}
-  - {fileID: 1970202197}
+  - {fileID: 970295838}
