@@ -499,7 +499,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxPlayers: 40
-  lobbySceneName: ChannelScene
+  lobbySceneName: ' '
   gameSceneName: TextScene
   skipIfAlreadyInLobby: 1
 --- !u!4 &189953014

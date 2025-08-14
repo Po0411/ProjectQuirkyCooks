@@ -1,4 +1,5 @@
-﻿using System;
+﻿// Assets/Scripts/RelayLobbyManager.cs
+using System;
 using System.Threading.Tasks;
 using UnityEngine;
 using Unity.Netcode;
@@ -16,11 +17,11 @@ public class RelayLobbyManager : MonoBehaviour
     public int maxPlayers = 40;
 
     [Header("씬 설정")]
-    [Tooltip("방 생성 후 이동할 로비(준비) 씬 이름")]
+    [Tooltip("방 생성 후 머무를 로비(준비) 씬 이름")]
     public string lobbySceneName = "ChannelScene";
     [Tooltip("모든 준비 완료 시 이동할 게임 씬 이름")]
-    public string gameSceneName = "GameMulti";
-    [Tooltip("이미 로비 씬이면 이동 생략")]
+    public string gameSceneName = "TextScene"; // 필요 시 인스펙터에서 변경
+    [Tooltip("이 필드는 더 이상 사용하지 않음(항상 네트워크로 재로드)")]
     public bool skipIfAlreadyInLobby = true;
 
     // UI 이벤트
@@ -35,6 +36,7 @@ public class RelayLobbyManager : MonoBehaviour
         {
             if (UnityServices.State != ServicesInitializationState.Initialized)
                 await UnityServices.InitializeAsync();
+
             if (!AuthenticationService.Instance.IsSignedIn)
                 await AuthenticationService.Instance.SignInAnonymouslyAsync();
         }
@@ -45,30 +47,36 @@ public class RelayLobbyManager : MonoBehaviour
         }
     }
 
-    /// <summary>호스트 시작 + 로비 씬으로 네트워크 전환</summary>
+    /// <summary>
+    /// 호스트 시작 + (항상) 로비 씬을 네트워크로 재로드
+    /// </summary>
     public async Task<(bool ok, string joinCode, string error)> CreateLobbyAsync()
     {
         try
         {
             if (NetworkManager.Singleton == null)
                 return (false, null, "씬에 NetworkManager가 없습니다.");
+
             var transport = NetworkManager.Singleton.GetComponent<UnityTransport>();
             if (transport == null)
                 return (false, null, "NetworkManager에 UnityTransport가 없습니다.");
 
             OnStatusChanged?.Invoke("방 생성 중…");
 
+            // Relay 할당 & 조인코드
             Allocation allocation = await RelayService.Instance.CreateAllocationAsync(maxPlayers);
             string joinCode = await RelayService.Instance.GetJoinCodeAsync(allocation.AllocationId);
 
+            // Relay 접속 정보 설정
             transport.SetRelayServerData(
                 allocation.RelayServer.IpV4,
                 (ushort)allocation.RelayServer.Port,
                 allocation.AllocationIdBytes,
                 allocation.Key,
-                allocation.ConnectionData);
+                allocation.ConnectionData
+            );
 
-            // 🔴 자동 플레이어 스폰 비활성화 (NGO 1.8+에는 AutoCreatePlayer 토글이 없음)
+            // 🔴 자동 플레이어 스폰 비활성화 (NGO 1.8+엔 AutoCreatePlayer 토글 없음)
             NetworkManager.Singleton.NetworkConfig.PlayerPrefab = null;
 
             if (!NetworkManager.Singleton.StartHost())
@@ -77,15 +85,13 @@ public class RelayLobbyManager : MonoBehaviour
             OnStatusChanged?.Invoke($"방 생성 완료. 초대 코드: {joinCode}");
             OnRoomCreated?.Invoke(joinCode);
 
-            // 로비 씬 네트워크 로드
+            // ✅ 항상 로비 씬을 '네트워크'로 다시 로드하여 씬 오브젝트(NetworkObject)들이 확실히 OnNetworkSpawn 타도록
             if (!string.IsNullOrEmpty(lobbySceneName))
             {
-                var active = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
-                if (!skipIfAlreadyInLobby || !string.Equals(active, lobbySceneName, StringComparison.Ordinal))
-                {
-                    NetworkManager.Singleton.SceneManager.LoadScene(
-                        lobbySceneName, UnityEngine.SceneManagement.LoadSceneMode.Single);
-                }
+                NetworkManager.Singleton.SceneManager.LoadScene(
+                    lobbySceneName,
+                    UnityEngine.SceneManagement.LoadSceneMode.Single
+                );
             }
 
             return (true, joinCode, null);
@@ -98,7 +104,9 @@ public class RelayLobbyManager : MonoBehaviour
         }
     }
 
-    /// <summary>클라이언트로 참가</summary>
+    /// <summary>
+    /// 클라이언트로 참가
+    /// </summary>
     public async Task<bool> JoinWithCodeAsync(string joinCode)
     {
         if (string.IsNullOrWhiteSpace(joinCode) || joinCode.Length != 6)
@@ -115,6 +123,7 @@ public class RelayLobbyManager : MonoBehaviour
                 OnStatusChanged?.Invoke("NetworkManager 없음");
                 return false;
             }
+
             var transport = NetworkManager.Singleton.GetComponent<UnityTransport>();
             if (transport == null)
             {
@@ -124,6 +133,7 @@ public class RelayLobbyManager : MonoBehaviour
 
             OnStatusChanged?.Invoke("참가 시도 중…");
 
+            // Relay 참가
             JoinAllocation joinAlloc = await RelayService.Instance.JoinAllocationAsync(joinCode);
 
             transport.SetRelayServerData(
@@ -132,7 +142,8 @@ public class RelayLobbyManager : MonoBehaviour
                 joinAlloc.AllocationIdBytes,
                 joinAlloc.Key,
                 joinAlloc.ConnectionData,
-                joinAlloc.HostConnectionData);
+                joinAlloc.HostConnectionData
+            );
 
             // 🔴 자동 플레이어 스폰 비활성화
             NetworkManager.Singleton.NetworkConfig.PlayerPrefab = null;
@@ -144,8 +155,9 @@ public class RelayLobbyManager : MonoBehaviour
                 return false;
             }
 
-            OnStatusChanged?.Invoke("로비 입장");
+            OnStatusChanged?.Invoke("방 입장 성공");
             OnJoinSucceeded?.Invoke();
+            // 씬 전환은 호스트가 네트워크 씬 로드로 관리하므로 자동 동기화됨
             return true;
         }
         catch (RelayServiceException rse)
