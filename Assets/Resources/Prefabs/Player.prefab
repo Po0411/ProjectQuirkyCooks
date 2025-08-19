@@ -212,7 +212,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a067724d533ffa409f59f4a54ccec90, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interactRange: 3
+  interactRange: 50
   interactLayer:
     serializedVersion: 2
     m_Bits: 128
@@ -563,13 +563,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8483227612506062215}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.1361, z: 0.0239}
+  m_LocalRotation: {x: -0, y: -0.06989006, z: -0, w: 0.9975547}
+  m_LocalPosition: {x: 0.077, y: 0.2408, z: -0.433}
   m_LocalScale: {x: 0.14285713, y: 0.14285713, z: 0.14285713}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8556139372743554277}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -8.015, z: 0}
 --- !u!20 &4964120093976857778
 Camera:
   m_ObjectHideFlags: 0
