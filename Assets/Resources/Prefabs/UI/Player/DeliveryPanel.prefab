@@ -64,13 +64,12 @@ MonoBehaviour:
   - {fileID: 11400000, guid: da994821907c60946b84018b6753f260, type: 2}
   - {fileID: 11400000, guid: 6323488f9fdcb7741b29c3511f247350, type: 2}
   - {fileID: 11400000, guid: d39a528aac6954d42aeeda14113d54ba, type: 2}
-  - {fileID: 0}
   resourcesFolder: Items
   slotsRoot: {fileID: 3267919971905501530}
   autoAddSlotIfMissing: 1
   slots: []
   uniqueItems: 1
-  fillLocalRandomOnStart: 1
+  fillLocalRandomOnStart: 0
 --- !u!1 &2918281623625971124
 GameObject:
   m_ObjectHideFlags: 0
