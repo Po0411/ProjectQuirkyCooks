@@ -135,7 +135,6 @@ GameObject:
   - component: {fileID: 58279696}
   - component: {fileID: 58279695}
   - component: {fileID: 58279694}
-  - component: {fileID: 58279697}
   m_Layer: 5
   m_Name: PlaySoloModeButton
   m_TagString: Untagged
@@ -207,9 +206,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 58279697}
-        m_TargetAssemblyTypeName: SceneButtonLoader, Assembly-CSharp
-        m_MethodName: LoadScene
+      - m_Target: {fileID: 1574663270}
+        m_TargetAssemblyTypeName: ModeSelectUI, Assembly-CSharp
+        m_MethodName: OnClickSolo
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -257,19 +256,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 58279692}
   m_CullTransparentMesh: 1
---- !u!114 &58279697
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 58279692}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2a21270f7031f7f48ada707ca773dfbc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  sceneName: 
 --- !u!1 &430666690
 GameObject:
   m_ObjectHideFlags: 0
@@ -903,6 +889,51 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1477148651}
   m_CullTransparentMesh: 1
+--- !u!1 &1574663269
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1574663271}
+  - component: {fileID: 1574663270}
+  m_Layer: 0
+  m_Name: ModeSelectUI
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1574663270
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1574663269}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 10913c5f9d72d6d49aeb48d60f648b1c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  soloSceneName: SoloMapScene
+--- !u!4 &1574663271
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1574663269}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1921209631
 GameObject:
   m_ObjectHideFlags: 0
@@ -1358,3 +1389,4 @@ SceneRoots:
   - {fileID: 2108872344}
   - {fileID: 622711423}
   - {fileID: 616374824}
+  - {fileID: 1574663271}

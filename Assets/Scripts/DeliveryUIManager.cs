@@ -1,31 +1,31 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-#if UNITY_NETCODE_GAMEOBJECTS
-using Unity.Netcode;
-#endif
 
 public class DeliveryUIManager : MonoBehaviour
 {
     [Header("Item Source (둘 중 하나)")]
-    public List<ItemData> manualItems = new();      // 인스펙터에서 넣는 방식
+    public List<ItemData> manualItems = new();      // 인스펙터에서 직접 넣기
     public string resourcesFolder = "Items";        // Resources/<path>/* 자동 수집(비우면 미사용)
 
     [Header("Slots")]
-    [Tooltip("슬롯들을 담고 있는 부모(예: Delivery). 지정하면 그 자식들을 자동으로 슬롯화합니다.")]
-    public Transform slotsRoot;
-    [Tooltip("씬에 DeliverySlot이 없다면 자식들에 자동으로 컴포넌트를 붙입니다.")]
-    public bool autoAddSlotIfMissing = true;
-    [Tooltip("슬롯들을 여기 수집합니다. 비워두면 자동 수집/생성합니다.")]
-    public DeliverySlot[] slots;
+    public Transform slotsRoot;                     // Delivery(부모)
+    public bool autoAddSlotIfMissing = true;        // 자식에 DeliverySlot 자동 추가
+    public DeliverySlot[] slots;                    // 비우면 자동 수집
 
     [Header("Options")]
-    public bool uniqueItems = true;
-    [Tooltip("네트워크가 실행중이 아닐 때, Start에서 자동으로 랜덤 채우기")]
-    public bool fillLocalRandomOnStart = true;
+    public bool uniqueItems = true;                 // 슬롯 간 중복 허용 여부
+    public bool fillLocalRandomOnStart = true;      // 네트워크 미사용/싱글에서 자동 채우기
 
-    // 내부 카탈로그(정렬/중복 제거)
+    [Header("Slot Colors (왼쪽 위부터 순서대로)")]
+    public RegionColor[] slotColors;                // 각 슬롯의 색상(=지역) 매핑
+
+    // 내부 상태
     private List<ItemData> _catalog;
+    private int[] _indices;                         // 각 슬롯이 참조하는 카탈로그 인덱스
+
+    public event Action OnRefreshed;                // UI가 재적용될 때 알림(손님이 아이콘 갱신 등에 사용)
 
     void Awake()
     {
@@ -35,40 +35,35 @@ public class DeliveryUIManager : MonoBehaviour
 
     void Start()
     {
-        // 오프라인/싱글 테스트일 때 자동 채우기
         if (fillLocalRandomOnStart && !IsNetRunning())
-        {
             ApplyLocalRandom();
-        }
     }
 
     bool IsNetRunning()
     {
 #if UNITY_NETCODE_GAMEOBJECTS
-        return NetworkManager.Singleton != null && NetworkManager.Singleton.IsListening;
+        return Unity.Netcode.NetworkManager.Singleton != null
+            && Unity.Netcode.NetworkManager.Singleton.IsListening;
 #else
         return false;
 #endif
     }
 
-    // ====== 슬롯 수집/생성 ======
-    void CollectOrCreateSlots()
+    // ──────────────────────────────────────────────────────────────────────────────
+    // 슬롯 수집/생성
+    public void CollectOrCreateSlots()
     {
-        // 1) 우선 자식에서 DeliverySlot 수집
         var found = GetComponentsInChildren<DeliverySlot>(true).ToList();
 
-        // 2) slotsRoot가 있고, 슬롯이 하나도 없으면 자동으로 붙이기
         if ((found == null || found.Count == 0) && slotsRoot != null && autoAddSlotIfMissing)
         {
             var list = new List<DeliverySlot>();
             for (int i = 0; i < slotsRoot.childCount; i++)
             {
                 var child = slotsRoot.GetChild(i);
-                // Label_* 같은 각 칸에 DeliverySlot이 없다면 추가
                 var slot = child.GetComponent<DeliverySlot>();
                 if (slot == null) slot = child.gameObject.AddComponent<DeliverySlot>();
 
-                // 타겟 Image 자동 지정: 우선 "Image" 또는 "Icon" 자식, 없으면 본인 Image
                 if (slot.targetImage == null)
                 {
                     var icon = child.Find("Image") ? child.Find("Image").GetComponent<UnityEngine.UI.Image>() : null;
@@ -83,12 +78,19 @@ public class DeliveryUIManager : MonoBehaviour
             found = list;
         }
 
-        // 3) 인스펙터에 지정된 slots가 없으면 자동 수집 결과 사용
         if (slots == null || slots.Length == 0)
             slots = found.ToArray();
+
+        // 색상 배열 사이즈 보정
+        if (slotColors == null || slotColors.Length != slots.Length)
+        {
+            slotColors = new RegionColor[slots.Length];
+            for (int i = 0; i < slotColors.Length; i++)
+                slotColors[i] = (RegionColor)(i % 4); // 기본 순환 배치
+        }
     }
 
-    // ====== 아이템 카탈로그 구성 ======
+    // 카탈로그 구성
     public void BuildCatalog()
     {
         var list = new List<ItemData>();
@@ -105,9 +107,9 @@ public class DeliveryUIManager : MonoBehaviour
 
         _catalog = list
             .Where(i => i.icon != null)
-            .GroupBy(i => i.itemName)     // 이름 중복 제거
+            .GroupBy(i => i.itemName)        // 이름 중복 제거
             .Select(g => g.First())
-            .OrderBy(i => i.itemName)     // 서버/클라 동일 순서 보장
+            .OrderBy(i => i.itemName)        // 서버/클라 동일 순서 보장
             .ToList();
 
         if (_catalog.Count == 0)
@@ -116,7 +118,15 @@ public class DeliveryUIManager : MonoBehaviour
 
     public int CatalogCount => _catalog?.Count ?? 0;
 
-    // ====== 랜덤 뽑기/적용 ======
+    // ──────────────────────────────────────────────────────────────────────────────
+    // 랜덤 생성/적용
+    public void ApplyLocalRandom()
+    {
+        if (slots == null) return;
+        var indices = GenerateRandomIndices(slots.Length);
+        ApplyByIndices(indices);
+    }
+
     public List<int> GenerateRandomIndices(int count)
     {
         var result = new List<int>(count);
@@ -130,41 +140,96 @@ public class DeliveryUIManager : MonoBehaviour
 
         if (uniqueItems)
         {
-            var idxs = Enumerable.Range(0, CatalogCount).ToList();
-            for (int i = idxs.Count - 1; i > 0; --i)
+            var pool = Enumerable.Range(0, CatalogCount).ToList();
+            for (int i = pool.Count - 1; i > 0; --i)
             {
-                int j = Random.Range(0, i + 1);
-                (idxs[i], idxs[j]) = (idxs[j], idxs[i]);
+                int j = UnityEngine.Random.Range(0, i + 1);
+                (pool[i], pool[j]) = (pool[j], pool[i]);
             }
-            for (int i = 0; i < count; i++) result.Add(idxs[i]);
+            for (int i = 0; i < count; i++)
+                result.Add(pool[i]);
         }
         else
         {
             for (int i = 0; i < count; i++)
-                result.Add(Random.Range(0, CatalogCount));
+                result.Add(UnityEngine.Random.Range(0, CatalogCount));
         }
         return result;
-    }
-
-    public void ApplyLocalRandom()
-    {
-        var n = slots != null ? slots.Length : 0;
-        ApplyByIndices(GenerateRandomIndices(n));
     }
 
     public void ApplyByIndices(IReadOnlyList<int> indices)
     {
         if (slots == null) return;
+
+        if (_indices == null || _indices.Length != slots.Length)
+            _indices = new int[slots.Length];
+
         for (int i = 0; i < slots.Length; i++)
         {
-            Sprite sp = null;
-            if (indices != null && i < indices.Count && indices[i] >= 0 && indices[i] < CatalogCount)
-                sp = _catalog[indices[i]].icon;
-            slots[i]?.SetSprite(sp);
+            int idx = (indices != null && i < indices.Count) ? indices[i] : -1;
+            _indices[i] = idx;
+
+            ItemData item = (idx >= 0 && idx < CatalogCount) ? _catalog[idx] : null;
+            slots[i]?.SetItem(item);
         }
+
+        OnRefreshed?.Invoke();
     }
 
-    // 에디터에서 즉시 테스트
-    [ContextMenu("Apply Local Random (Now)")]
-    void CM_ApplyLocalRandom() => ApplyLocalRandom();
+    // ──────────────────────────────────────────────────────────────────────────────
+    // 색상(지역) 기반 조회/재롤
+    public int GetSlotIndexByColor(RegionColor color)
+    {
+        if (slotColors == null || slots == null) return -1;
+        for (int i = 0; i < slots.Length; i++)
+            if (slotColors[i] == color) return i;
+        return -1;
+    }
+
+    public ItemData GetItemForColor(RegionColor color)
+    {
+        int i = GetSlotIndexByColor(color);
+        if (i < 0 || i >= slots.Length) return null;
+        return slots[i]?.AssignedItem;
+    }
+
+    public void RerollForColor(RegionColor color)
+    {
+        int i = GetSlotIndexByColor(color);
+        if (i < 0) return;
+
+        int newIdx = -1;
+        if (CatalogCount > 0)
+        {
+            if (uniqueItems)
+            {
+                var used = new HashSet<int>(_indices.Where((x, k) => k != i && x >= 0));
+                var candidates = Enumerable.Range(0, CatalogCount).Where(x => !used.Contains(x)).ToList();
+                if (candidates.Count == 0) candidates = Enumerable.Range(0, CatalogCount).ToList();
+                newIdx = candidates[UnityEngine.Random.Range(0, candidates.Count)];
+            }
+            else
+            {
+                newIdx = UnityEngine.Random.Range(0, CatalogCount);
+            }
+        }
+        ApplyOne(i, newIdx);
+    }
+
+    void ApplyOne(int slotIndex, int catalogIndex)
+    {
+        if (slots == null || slotIndex < 0 || slotIndex >= slots.Length) return;
+
+        if (_indices == null || _indices.Length != slots.Length)
+            _indices = new int[slots.Length];
+
+        _indices[slotIndex] = catalogIndex;
+        ItemData item = (catalogIndex >= 0 && catalogIndex < CatalogCount) ? _catalog[catalogIndex] : null;
+        slots[slotIndex]?.SetItem(item);
+
+        OnRefreshed?.Invoke();
+    }
+
+    // 배달 완료 후 호출하면 해당 색 슬롯만 새로 뽑아 UI 반영
+    public void CompleteAndRerollForColor(RegionColor color) => RerollForColor(color);
 }

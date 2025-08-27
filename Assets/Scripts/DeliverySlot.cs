@@ -1,20 +1,40 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using UnityEngine.UI;
 
 public class DeliverySlot : MonoBehaviour
 {
-    [Tooltip("¾ÆÀÌÄÜÀ» ±×¸± Image. ºñ¿ì¸é ÀÚ½Ä 'Icon' ¶Ç´Â ÀÚ±â ÀÚ½ÅÀÇ Image¸¦ ÀÚµ¿ »ç¿ë")]
+    [Tooltip("ì•„ì´ì½˜ì„ ê·¸ë¦´ Image. ë¹„ìš°ë©´ ìžì‹ 'Image'/'Icon' ë˜ëŠ” ìžê¸° ìžì‹ ì˜ Imageë¥¼ ìžë™ ì‚¬ìš©")]
     public Image targetImage;
-    [Tooltip("½ºÇÁ¶óÀÌÆ® ¾øÀ¸¸é °¨Ãß±â")]
+    [Tooltip("ìŠ¤í”„ë¼ì´íŠ¸ ì—†ìœ¼ë©´ ê°ì¶”ê¸°")]
     public bool hideWhenEmpty = true;
 
+    // í˜„ìž¬ ìŠ¬ë¡¯ì— ë°°ì •ëœ ì•„ì´í…œ (ì™¼ìª½ ì£¼ë¬¸ì˜ ì‹¤ì œ ë°ì´í„°)
+    public ItemData AssignedItem { get; private set; }
+
     void Reset() => AutoFindImage();
-    void Awake() { if (targetImage == null) AutoFindImage(); }
+    void Awake()
+    {
+        if (targetImage == null) AutoFindImage();
+    }
 
     void AutoFindImage()
     {
-        if (transform.Find("Icon") && transform.Find("Icon").TryGetComponent(out Image img)) { targetImage = img; return; }
-        if (!TryGetComponent(out targetImage)) targetImage = GetComponentInChildren<Image>(true);
+        if (targetImage) return;
+
+        var t = transform.Find("Image") ?? transform.Find("Icon");
+        if (t && t.TryGetComponent(out Image img))
+        {
+            targetImage = img;
+            return;
+        }
+        if (!TryGetComponent(out targetImage))
+            targetImage = GetComponentInChildren<Image>(true);
+    }
+
+    public void SetItem(ItemData item)
+    {
+        AssignedItem = item;
+        SetSprite(item ? item.icon : null);
     }
 
     public void SetSprite(Sprite s)
@@ -24,5 +44,5 @@ public class DeliverySlot : MonoBehaviour
         targetImage.enabled = s != null || !hideWhenEmpty;
     }
 
-    public void Clear() => SetSprite(null);
+    public void Clear() => SetItem(null);
 }

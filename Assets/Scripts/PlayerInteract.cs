@@ -3,50 +3,76 @@ using TMPro;
 
 public class PlayerInteract : MonoBehaviour
 {
-    [Header("상호작용 설정")]
-    public float interactRange = 5f;
-    public LayerMask interactLayer;
-    public TextMeshProUGUI interactTextUI;
+    [Header("Camera (비워두면 자동 탐색)")]
+    [SerializeField] private Camera cam;
 
-    private IInteractable currentInteractable;
+    [Header("상호작용 설정")]
+    [SerializeField] private float interactRange = 5f;
+    [SerializeField] private LayerMask interactLayer = ~0;
+
+    [Header("UI (선택)")]
+    [SerializeField] private TextMeshProUGUI interactTextUI;
+
+    private IInteractable current;
+    private InventoryManager inv; // 내 플레이어의 인벤 캐시
+
+    void Awake()
+    {
+        // 내 인벤토리 캐시(멀티 대비: 내 오브젝트에 붙은 것 우선)
+        inv = GetComponent<InventoryManager>();
+        if (inv == null) inv = FindObjectOfType<InventoryManager>(true);
+
+        // 카메라 자동 할당
+        if (cam == null) cam = Camera.main;
+        if (cam == null)
+        {
+            var found = FindObjectOfType<Camera>(true);
+            if (found != null)
+            {
+                cam = found;
+                if (!found.CompareTag("MainCamera")) found.tag = "MainCamera";
+            }
+        }
+
+        if (interactTextUI) interactTextUI.gameObject.SetActive(false);
+    }
 
     void Update()
     {
-        // Ray 생성
-        Ray ray = new Ray(Camera.main.transform.position, Camera.main.transform.forward);
+        if (!cam) { cam = Camera.main; if (!cam) return; }
 
-        if (Physics.Raycast(ray, out RaycastHit hit, interactRange, interactLayer))
+        Ray ray = new Ray(cam.transform.position, cam.transform.forward);
+
+        // 트리거도 맞도록 Collide 지정
+        if (Physics.Raycast(ray, out RaycastHit hit, interactRange, interactLayer, QueryTriggerInteraction.Collide))
         {
-            currentInteractable = hit.collider.GetComponent<IInteractable>();
+            // ⬅️ 자식 콜라이더여도 상위에서 IInteractable 검색
+            var interactable = hit.collider.GetComponentInParent<IInteractable>();
 
-            if (currentInteractable != null)
+            if (interactable != null)
             {
-                // UI 표시
-                interactTextUI.gameObject.SetActive(true);
-                interactTextUI.text = currentInteractable.GetInteractText();
+                current = interactable;
 
-                // 좌클릭 시 상호작용
+                if (interactTextUI)
+                {
+                    interactTextUI.gameObject.SetActive(true);
+                    interactTextUI.text = current.GetInteractText();
+                }
+
                 if (Input.GetMouseButtonDown(0))
                 {
-                    InventoryManager inv = FindObjectOfType<InventoryManager>();
-                    currentInteractable.Interact(inv);
+                    current.Interact(inv); // 인벤 null이어도 상대 측에서 방어하도록 구현됨
                 }
-            }
-            else
-            {
-                HideText();
+                return;
             }
         }
-        else
-        {
-            HideText();
-        }
+
+        HideText();
     }
 
-    void HideText()
+    private void HideText()
     {
-        if (interactTextUI != null)
-            interactTextUI.gameObject.SetActive(false);
-        currentInteractable = null;
+        if (interactTextUI) interactTextUI.gameObject.SetActive(false);
+        current = null;
     }
 }

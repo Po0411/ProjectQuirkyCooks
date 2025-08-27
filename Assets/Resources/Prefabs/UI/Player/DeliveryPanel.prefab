@@ -69,7 +69,7 @@ MonoBehaviour:
   autoAddSlotIfMissing: 1
   slots: []
   uniqueItems: 1
-  fillLocalRandomOnStart: 0
+  fillLocalRandomOnStart: 1
 --- !u!1 &2918281623625971124
 GameObject:
   m_ObjectHideFlags: 0
