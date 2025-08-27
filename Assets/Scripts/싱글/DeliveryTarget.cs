@@ -26,11 +26,10 @@ public class DeliveryTarget : MonoBehaviour, IInteractable
         if (_ui != null) _ui.OnRefreshed -= RefreshFromUI;
     }
 
-    private void RefreshFromUI()
+    void RefreshFromUI()
     {
         if (_ui == null) return;
         requiredItem = _ui.GetItemForColor(regionColor);
-
         if (bubbleIcon != null)
         {
             bubbleIcon.sprite = requiredItem ? requiredItem.icon : null;
@@ -38,47 +37,34 @@ public class DeliveryTarget : MonoBehaviour, IInteractable
         }
     }
 
-    // ───────────────── IInteractable ─────────────────
-    public string GetInteractText()
-    {
-        if (requiredItem == null) return "주문 없음";
-        return $"{requiredItem.itemName} 배달";
-    }
+    public string GetInteractText() =>
+        requiredItem == null ? "주문 없음" : $"{requiredItem.itemName} 배달";
 
-    // IInteractable에 매개변수 없는 Interact()가 있을 때를 위한 구현
-    public void Interact()
-    {
-        // 씬에서 내 인벤토리 찾아서 위임
-        var inv = FindObjectOfType<InventoryManager>(true);
-        Interact(inv);
-    }
+    public void Interact() => Interact(FindObjectOfType<InventoryManager>(true));
 
-    // 선택된 아이템을 직접 받는 버전
     public void Interact(InventoryManager inv)
     {
         if (requiredItem == null) return;
-
-        if (inv == null)
-        {
-            Debug.Log("인벤토리 없음");
-            return;
-        }
+        if (inv == null) { Debug.Log("인벤토리 없음"); return; }
 
         var selected = inv.GetSelectedItem();
-        if (selected == null)
-        {
-            Debug.Log("선택된 아이템 없음");
-            return;
-        }
+        if (selected == null) { Debug.Log("선택된 아이템 없음"); return; }
 
         if (selected == requiredItem)
         {
             inv.RemoveItemLocal(selected, 1);
-            Debug.Log("배달 완료!");
+            var gsm = GameStatsManager.Instance;
+            if (gsm != null)
+            {
+                gsm.AddRevenue(requiredItem.price);   // 라운드 수익
+                gsm.AddCashLocal(requiredItem.price); // 현금도 증가
+                gsm.AddDeliveryLocal(1);              // 횟수 증가
+            }
 
-            // 왼쪽 주문 중 이 지역색 슬롯만 재랜덤 + 버블 자동 갱신
-            if (_ui != null) _ui.CompleteAndRerollForColor(regionColor);
+            // 슬롯 재랜덤 + 거품아이콘 갱신
+            _ui?.CompleteAndRerollForColor(regionColor);
             RefreshFromUI();
+            Debug.Log("배달 완료!");
         }
         else
         {

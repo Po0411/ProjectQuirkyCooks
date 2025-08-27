@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿// Assets/Scripts/ItemData.cs
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Item/ItemData")]
@@ -9,5 +8,8 @@ public class ItemData : ScriptableObject
     public Sprite icon;
     public int maxStack = 4;
 
-    public GameObject worldPrefab; // ✅ 드랍할 실제 오브젝트 프리팹
+    [Header("판매/배달 가격")]
+    public int price = 10;                 // ✅ 배달 시 들어오는 금액
+
+    public GameObject worldPrefab;         // 드랍될 실제 프리팹
 }
