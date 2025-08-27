@@ -2370,7 +2370,7 @@ GameObject:
   - component: {fileID: 2172482542960719098}
   - component: {fileID: 1836300844520744080}
   - component: {fileID: 4452915801598546675}
-  - component: {fileID: 9147410015444354971}
+  - component: {fileID: 64577869167216570}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -2496,7 +2496,7 @@ MonoBehaviour:
     mipBias: 0
     varianceClampScale: 0.9
     contrastAdaptiveSharpening: 0
---- !u!114 &9147410015444354971
+--- !u!114 &64577869167216570
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2853,6 +2853,56 @@ Transform:
   - {fileID: 6387425870008430793}
   m_Father: {fileID: 6540822642996220127}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &7442735712668740606
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3286724678758659376}
+  - component: {fileID: 6903753276629646107}
+  m_Layer: 0
+  m_Name: PlayerAttack
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3286724678758659376
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7442735712668740606}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7851111750169889089}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6903753276629646107
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7442735712668740606}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c0d5748417e2a04459011c27e9cc920e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damage: 500
+  range: 10
+  monsterLayer:
+    serializedVersion: 2
+    m_Bits: 512
+  playerCamera: {fileID: 2172482542960719098}
 --- !u!1 &7466919402303890111
 GameObject:
   m_ObjectHideFlags: 0
@@ -3177,6 +3227,7 @@ Transform:
   - {fileID: 4670939345403323946}
   - {fileID: 1694949647781688141}
   - {fileID: 3834287237672710360}
+  - {fileID: 3286724678758659376}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!143 &6738851347563602764
