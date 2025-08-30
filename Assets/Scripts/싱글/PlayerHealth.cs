@@ -37,6 +37,16 @@ public class PlayerHealth : MonoBehaviour
             Die();
     }
 
+    /// <summary>
+    /// 슬롯형 자연 회복/힐용 API. slots 만큼 HP 슬롯을 회복합니다(최소 1).
+    /// </summary>
+    public void HealSlots(int slots)
+    {
+        if (isDead) return;
+        currentHpSlots = Mathf.Clamp(currentHpSlots + Mathf.Max(1, slots), 0, maxHpSlots);
+        UpdateHpUI();
+    }
+
     private void UpdateHpUI()
     {
         for (int i = 0; i < hpSegments.Length; i++)

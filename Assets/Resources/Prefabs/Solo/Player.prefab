@@ -3203,6 +3203,7 @@ GameObject:
   - component: {fileID: 4624956447010973354}
   - component: {fileID: 5827005831608314101}
   - component: {fileID: 7993516192980578210}
+  - component: {fileID: 3071695674749588732}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -3361,6 +3362,28 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isReady:
     m_InternalValue: 0
+--- !u!114 &3071695674749588732
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8112011895475697916}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 083987351dc2bcf47bdd4185d8253a15, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHpSlots: 5
+  hpSegments:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  filledSprite: {fileID: 0}
+  emptySprite: {fileID: 0}
+  playerCamera: {fileID: 2172482542960719098}
 --- !u!1 &8167141308961424133
 GameObject:
   m_ObjectHideFlags: 0
