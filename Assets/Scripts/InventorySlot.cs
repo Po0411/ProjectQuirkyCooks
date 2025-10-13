@@ -13,7 +13,7 @@ public class InventorySlot : MonoBehaviour
     public Sprite normalBackground;     // 기본 흰색
     public Sprite selectedBackground;   // 선택 노란색
 
-    private ItemData currentItem;
+    public ItemData currentItem;
     private int count = 0;
     private const int maxStack = 4;
     private bool isSelected = false;
