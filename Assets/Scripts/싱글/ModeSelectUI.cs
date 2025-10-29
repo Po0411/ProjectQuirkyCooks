@@ -6,14 +6,14 @@ using Unity.Netcode;
 
 public class ModeSelectUI : MonoBehaviour
 {
-    [SerializeField] string soloSceneName = "SoloMapScene";
+    [SerializeField] string soloSceneName = "MainLevel";
 
-    // ½Ì±Û Ä«µå/¹öÆ° OnClick ¿¡ ¿¬°á
+    // ï¿½Ì±ï¿½ Ä«ï¿½ï¿½/ï¿½ï¿½Æ° OnClick ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     public void OnClickSolo()
     {
         GameModeState.Current = GameMode.Solo;
 
-        // È¤½Ã ¿¡µðÅÍ¿¡¼­ È£½ºÆ®/Å¬¶ó°¡ ÄÑÁø »óÅÂ¸é Á¤¸®
+        // È¤ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Í¿ï¿½ï¿½ï¿½ È£ï¿½ï¿½Æ®/Å¬ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Â¸ï¿½ ï¿½ï¿½ï¿½ï¿½
 #if UNITY_NETCODE_GAMEOBJECTS
         if (NetworkManager.Singleton != null && NetworkManager.Singleton.IsListening)
         {
@@ -23,7 +23,7 @@ public class ModeSelectUI : MonoBehaviour
         SceneManager.LoadScene(soloSceneName, LoadSceneMode.Single);
     }
 
-    // (¼±ÅÃ) ¸ÖÆ¼ ¹öÆ°¿ë
+    // (ï¿½ï¿½ï¿½ï¿½) ï¿½ï¿½Æ¼ ï¿½ï¿½Æ°ï¿½ï¿½
     public void OnClickMulti(string lobbySceneName = "ChannelScene")
     {
         GameModeState.Current = GameMode.Multi;

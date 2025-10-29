@@ -108,8 +108,8 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.04
-  m_Height: 0.23882943
+  m_Radius: 0.07
+  m_Height: 0.3
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &3274196398672800991
@@ -173,6 +173,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemData: {fileID: 11400000, guid: 26809a2c26aaa4d4ebc1bfe208298792, type: 2}
+  maxDistance: 3
+  interactKey: 101
 --- !u!114 &7853161198792156625
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -20,11 +20,11 @@ public class MonsterAI : MonoBehaviour
     public float closeAttackRange = 1f;
 
     [Header("Movement & Attack")]
-    public float moveSpeed = 1.2f;   // DaeduMabel/Tomatok ±âº»°ª
-    public float krangMoveSpeed = 1.5f;   // Krang Àü¿ë
-    public float attackInterval = 0.2f;   // DaeduMabel/Tomatok ±âº»°ª
-    public float krangAttackInterval = 0.3f;   // Krang Àü¿ë
-    public float stunDuration = 2f;     // Krang ½ºÅÏ ½Ã°£
+    public float moveSpeed = 1.2f;   // DaeduMabel/Tomatok ï¿½âº»ï¿½ï¿½
+    public float krangMoveSpeed = 1.5f;   // Krang ï¿½ï¿½ï¿½ï¿½
+    public float attackInterval = 0.2f;   // DaeduMabel/Tomatok ï¿½âº»ï¿½ï¿½
+    public float krangAttackInterval = 0.3f;   // Krang ï¿½ï¿½ï¿½ï¿½
+    public float stunDuration = 2f;     // Krang ï¿½ï¿½ï¿½ï¿½ ï¿½Ã°ï¿½
 
     private CharacterController cc;
     private Vector3 spawnPos;
@@ -40,7 +40,7 @@ public class MonsterAI : MonoBehaviour
         cc = GetComponent<CharacterController>();
         spawnPos = transform.position;
 
-        // ¡å Ãß°¡: ¹Ù´Ú ÂøÁö
+        // ï¿½ï¿½ ï¿½ß°ï¿½: ï¿½Ù´ï¿½ ï¿½ï¿½ï¿½ï¿½
         SnapToGround();
 
         if (player == null)
@@ -50,7 +50,7 @@ public class MonsterAI : MonoBehaviour
     void SnapToGround()
     {
         RaycastHit hit;
-        // ·¹ÀÌ¸¦ ¸ó½ºÅÍ ¹Ù·Î ¾Æ·¡·Î ½î°í, ·¹ÀÌ¾î ¸¶½ºÅ©°¡ ÇÊ¿äÇÏ´Ù¸é Ãß°¡ÇÏ¼¼¿ä.
+        // ï¿½ï¿½ï¿½Ì¸ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ù·ï¿½ ï¿½Æ·ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½, ï¿½ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½ï¿½ï¿½Å©ï¿½ï¿½ ï¿½Ê¿ï¿½ï¿½Ï´Ù¸ï¿½ ï¿½ß°ï¿½ï¿½Ï¼ï¿½ï¿½ï¿½.
         if (Physics.Raycast(transform.position, Vector3.down, out hit, 100f))
         {
             Vector3 p = transform.position;
@@ -65,7 +65,7 @@ public class MonsterAI : MonoBehaviour
 
         float dist = Vector3.Distance(transform.position, player.position);
 
-        // Ãß°İ ½ÇÆĞ Á¶°Ç: ¾ÈÀü ±¸¿ª ÁøÀÔ OR ¸Ö¾îÁü(suspiciousRange ÃÊ°ú)
+        // ï¿½ß°ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½: ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ OR ï¿½Ö¾ï¿½ï¿½ï¿½(suspiciousRange ï¿½Ê°ï¿½)
         if (inSafeZone || dist > suspiciousRange)
         {
             state = State.Returning;
@@ -75,17 +75,17 @@ public class MonsterAI : MonoBehaviour
             return;
         }
 
-        // »óÅÂ ÀüÈ¯ (°Å¸® ±âÁØ)
+        // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¯ (ï¿½Å¸ï¿½ ï¿½ï¿½ï¿½ï¿½)
         if (dist > approachRange) state = State.Suspicious;
         else if (dist > chaseRange) state = State.Approach;
         else if (dist > attackRange) state = State.Chase;
         else state = State.Attack;
 
-        // Çàµ¿
+        // ï¿½àµ¿
         switch (state)
         {
             case State.Suspicious:
-                // TODO: ÀÇ½É ¾Ö´Ï¸ŞÀÌ¼Ç
+                // TODO: ï¿½Ç½ï¿½ ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½
                 break;
             case State.Approach:
             case State.Chase:
@@ -97,14 +97,34 @@ public class MonsterAI : MonoBehaviour
         }
     }
 
+    // void MoveTowards(Vector3 targetPos)
+    // {
+    //     Vector3 dir = (targetPos - transform.position).normalized;
+    //     float speed = (type == MonsterType.Krang) ? krangMoveSpeed : moveSpeed;
+    //     cc.SimpleMove(dir * speed);
+    //     if (dir != Vector3.zero)
+    //         transform.rotation = Quaternion.LookRotation(dir);
+    // }
+
     void MoveTowards(Vector3 targetPos)
+{
+    // 1. ë°©í–¥ ë²¡í„° ê³„ì‚° (Yê°’ í¬í•¨)
+    Vector3 dir = (targetPos - transform.position).normalized;
+    float speed = (type == MonsterType.Krang) ? krangMoveSpeed : moveSpeed;
+
+    // 2. ì´ë™: SimpleMoveëŠ” ì–´ì°¨í”¼ dirì˜ Yê°’ì„ ë¬´ì‹œí•˜ê³  ìì²´ ì¤‘ë ¥ì„ ì ìš©í•©ë‹ˆë‹¤.
+    cc.SimpleMove(dir * speed);
+
+    // 3. íšŒì „ìš© ë²¡í„° ìƒì„± (Yê°’ì„ 0ìœ¼ë¡œ ë§Œë“¦)
+    Vector3 lookDir = new Vector3(dir.x, 0, dir.z);
+
+    // 4. ìˆ˜í‰ ë°©í–¥ì´ ìˆì„ ë•Œë§Œ íšŒì „ (Yì¶•ìœ¼ë¡œ ì •í™•íˆ ê²¹ì¹˜ì§€ ì•Šì„ ë•Œ)
+    if (lookDir != Vector3.zero)
     {
-        Vector3 dir = (targetPos - transform.position).normalized;
-        float speed = (type == MonsterType.Krang) ? krangMoveSpeed : moveSpeed;
-        cc.SimpleMove(dir * speed);
-        if (dir != Vector3.zero)
-            transform.rotation = Quaternion.LookRotation(dir);
+        // Yê°’ì´ 0ì¸ lookDirë¥¼ ë°”ë¼ë³´ê²Œ í•˜ì—¬ ìˆ˜í‰ íšŒì „ë§Œ í•˜ë„ë¡ í•¨
+        transform.rotation = Quaternion.LookRotation(lookDir);
     }
+}
 
     void TryAttack()
     {
@@ -112,20 +132,20 @@ public class MonsterAI : MonoBehaviour
         if (Time.time - lastAttackTime < interval) return;
         lastAttackTime = Time.time;
 
-        // °ø°İ ½Ãµµ ·Î±×
-        Debug.Log($"[MonsterAI] TryAttack() È£Ãâ. »óÅÂ: {state}, °Å¸®: {Vector3.Distance(transform.position, player.position)}");
+        // ï¿½ï¿½ï¿½ï¿½ ï¿½Ãµï¿½ ï¿½Î±ï¿½
+        Debug.Log($"[MonsterAI] TryAttack() È£ï¿½ï¿½. ï¿½ï¿½ï¿½ï¿½: {state}, ï¿½Å¸ï¿½: {Vector3.Distance(transform.position, player.position)}");
 
-        // PlayerHealth ÄÄÆ÷³ÍÆ® Ã£¾Æº¸±â
+        // PlayerHealth ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® Ã£ï¿½Æºï¿½ï¿½ï¿½
         PlayerHealth ph = player.GetComponent<PlayerHealth>()
                          ?? player.GetComponentInChildren<PlayerHealth>();
         if (ph == null)
         {
-            Debug.LogError("[MonsterAI] PlayerHealth ÄÄÆ÷³ÍÆ®¸¦ Ã£Áö ¸øÇß½À´Ï´Ù! player=" + player.name);
+            Debug.LogError("[MonsterAI] PlayerHealth ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ Ã£ï¿½ï¿½ ï¿½ï¿½ï¿½ß½ï¿½ï¿½Ï´ï¿½! player=" + player.name);
             return;
         }
 
-        // ½ÇÁ¦ ´ë¹ÌÁö Àû¿ë ·Î±×
-        Debug.Log("[MonsterAI] ÇÃ·¹ÀÌ¾î¿¡°Ô 1Ä­ ´ë¹ÌÁö Àû¿ë!");
+        // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Î±ï¿½
+        Debug.Log("[MonsterAI] ï¿½Ã·ï¿½ï¿½Ì¾î¿¡ï¿½ï¿½ 1Ä­ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½!");
         if (type == MonsterType.Krang)
         {
             StartCoroutine(StunPlayer());

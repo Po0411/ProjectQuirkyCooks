@@ -25,7 +25,9 @@ public class ItemPickup : NetworkBehaviour
 
     void OnMouseOver()
     {
-        // 아이템 미세팅 방지
+        if(GunInOut.gunInOut == false)//guninout 추가 현중
+        {
+            // 아이템 미세팅 방지
         if (itemData == null) return;
 
         // 입력(클릭 또는 E)
@@ -66,6 +68,7 @@ public class ItemPickup : NetworkBehaviour
         else
         {
             RequestDespawnServerRpc(NetworkObject);
+        }
         }
     }
 

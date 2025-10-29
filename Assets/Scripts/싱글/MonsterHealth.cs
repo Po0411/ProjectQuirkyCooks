@@ -9,15 +9,15 @@ public class MonsterHealth : MonoBehaviour
     private float currentHp;
 
     [Header("UI")]
-    [Tooltip("ºôº¸µå Çï½º¹Ù ½ºÅ©¸³Æ®")]
+    [Tooltip("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï½ºï¿½ï¿½ ï¿½ï¿½Å©ï¿½ï¿½Æ®")]
     public BillboardHealthBar healthBar;
 
     [Header("Death Drop")]
-    [Tooltip("Á×À¸¸é »ý¼ºÇÒ °í±â ÇÁ¸®ÆÕ (Rigidbody ÇÊ¿ä)")]
+    [Tooltip("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ (Rigidbody ï¿½Ê¿ï¿½)")]
     public GameObject meatPrefab;
-    [Tooltip("°í±â°¡ Æ¢¾î ¿À¸¦ ÃÊ±â ÈûÀÇ ¼¼±â")]
+    [Tooltip("ï¿½ï¿½ï¿½â°¡ Æ¢ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ê±ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½")]
     public float spawnForce = 5f;
-    [Tooltip("°í±â¸¦ »ý¼ºÇÒ ³ôÀÌ ¿ÀÇÁ¼Â")]
+    [Tooltip("ï¿½ï¿½ï¿½â¸¦ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")]
     public Vector3 spawnOffset = new Vector3(0, 1f, 0);
 
     void Start()
@@ -28,25 +28,32 @@ public class MonsterHealth : MonoBehaviour
     }
 
     /// <summary>
-    /// ¿ÜºÎ¿¡¼­ ÇÇÇØ¸¦ ÀÔÈú ¶§ ÀÌ ¸Þ¼­µå¸¦ È£ÃâÇÏ¼¼¿ä.
+    /// ï¿½ÜºÎ¿ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ø¸ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ ï¿½Þ¼ï¿½ï¿½å¸¦ È£ï¿½ï¿½ï¿½Ï¼ï¿½ï¿½ï¿½.
     /// </summary>
     public void TakeDamage(float amount)
     {
         currentHp = Mathf.Max(0f, currentHp - amount);
 
-        // Çï½º¹Ù ¾÷µ¥ÀÌÆ®
-        if (healthBar != null)
-            healthBar.SetHealthFraction(currentHp / maxHp);
+        if(GunInOut.gunInOut == true)//í˜„ì¤‘ If GunInOut ì¶”ê°€í•¨
+        {
+            // ï¿½ï½ºï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®
+            if (healthBar != null)
+                healthBar.SetHealthFraction(currentHp / maxHp);
 
-        // HP°¡ 0ÀÌ¸é »ç¸Á Ã³¸®
-        if (currentHp == 0f)
-            Die();
+            // HPï¿½ï¿½ 0ï¿½Ì¸ï¿½ ï¿½ï¿½ï¿½ Ã³ï¿½ï¿½
+            if (currentHp == 0f)
+                Die();
+        }
     }
 
     void Die()
     {
         SpawnMeat();
-        // (¿øÇÑ´Ù¸é »ç¸Á ÀÌÆåÆ®, »ç¿îµå µî Ãß°¡)
+
+        MonsterDead.isDead = true;
+
+        
+        // (ï¿½ï¿½ï¿½Ñ´Ù¸ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®, ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ß°ï¿½)
         Destroy(gameObject);
     }
 
@@ -54,7 +61,7 @@ public class MonsterHealth : MonoBehaviour
     {
         if (meatPrefab == null)
         {
-            Debug.LogWarning("MonsterHealth: meatPrefabÀÌ ÇÒ´çµÇÁö ¾Ê¾Ò½À´Ï´Ù.");
+            Debug.LogWarning("MonsterHealth: meatPrefabï¿½ï¿½ ï¿½Ò´ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¾Ò½ï¿½ï¿½Ï´ï¿½.");
             return;
         }
 

@@ -24,7 +24,6 @@ public class AdvancedCookingStation : NetworkBehaviour, IInteractable
 
     // ==== IInteractable ====
     public string GetInteractText() => "요리하기";
-    public string Get_Result_Text() => "요리 완성!";
 
     // 무인자 Interact: InventoryManager를 찾아 위임
     public void Interact()

@@ -6,6 +6,10 @@ public class MouseLook : NetworkBehaviour
 {
     [Header("마우스 감도")]
     public float mouseSensitivity = 100f;
+    
+    //추가한거
+    public static float mouseSpeed;
+    //-----
 
     [Header("회전 대상(플레이어 루트)")]
     public Transform playerBody;
@@ -51,6 +55,10 @@ public class MouseLook : NetworkBehaviour
 
     void Update()
     {
+        //추가한거---
+        mouseSpeed = mouseSensitivity;
+        //----
+
         if (!HasLocalAuthority) return;
 
         // ESC로 잠금 토글, 마우스 좌클릭으로 재잠금 (원하면 삭제)
@@ -64,10 +72,10 @@ public class MouseLook : NetworkBehaviour
         float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime;
         float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity * Time.deltaTime;
 
-        // 카메라(피치)
-        xRotation -= mouseY;
-        xRotation = Mathf.Clamp(xRotation, -mouseY_U, mouseY_D);
-        transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
+        // 카메라(피치) ---임시로 지움
+        // xRotation -= mouseY;
+        // xRotation = Mathf.Clamp(xRotation, -mouseY_U, mouseY_D);
+        // transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
 
         // 플레이어 바디(요)
         if (playerBody != null)

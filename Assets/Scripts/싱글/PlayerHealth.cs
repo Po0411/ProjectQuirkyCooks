@@ -5,13 +5,15 @@ using UnityEngine.UI;
 
 public class PlayerHealth : MonoBehaviour
 {
-    [Header("¼³Á¤")]
+    [Header("ï¿½ï¿½ï¿½ï¿½")]
     public int maxHpSlots = 5;
     public Image[] hpSegments;
     public Sprite filledSprite;
     public Sprite emptySprite;
 
-    public Camera playerCamera;   // Á÷Á¢ ¿¬°áÇÏ´Â ¹æ½ÄÀ¸·Î º¯°æ
+    private Animator anim;//í˜„ì¤‘
+
+    public Camera playerCamera;   // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 
     private int currentHpSlots;
     private bool isDead = false;
@@ -20,6 +22,8 @@ public class PlayerHealth : MonoBehaviour
     {
         if (playerCamera == null)
             playerCamera = GetComponentInChildren<Camera>();
+
+        anim = GetComponent<Animator>();//í˜„ì¤‘
 
         currentHpSlots = maxHpSlots;
         UpdateHpUI();
@@ -35,10 +39,11 @@ public class PlayerHealth : MonoBehaviour
 
         if (currentHpSlots <= 0)
             Die();
+
     }
 
     /// <summary>
-    /// ½½·ÔÇü ÀÚ¿¬ È¸º¹/Èú¿ë API. slots ¸¸Å­ HP ½½·ÔÀ» È¸º¹ÇÕ´Ï´Ù(ÃÖ¼Ò 1).
+    /// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ú¿ï¿½ È¸ï¿½ï¿½/ï¿½ï¿½ï¿½ï¿½ API. slots ï¿½ï¿½Å­ HP ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ È¸ï¿½ï¿½ï¿½Õ´Ï´ï¿½(ï¿½Ö¼ï¿½ 1).
     /// </summary>
     public void HealSlots(int slots)
     {
@@ -68,7 +73,8 @@ public class PlayerHealth : MonoBehaviour
     private void Die()
     {
         isDead = true;
-        Debug.Log("ÇÃ·¹ÀÌ¾î »ç¸Á");
+        Debug.Log("ì‚¬ë§");
+        anim.SetBool("isDead", true);
 
         var controller = GetComponent<PlayerController>();
         if (controller != null) controller.enabled = false;

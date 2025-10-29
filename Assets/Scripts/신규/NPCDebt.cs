@@ -1,5 +1,4 @@
 using System;
-using TMPro;
 using UnityEngine;
 
 /// <summary>
@@ -8,11 +7,7 @@ using UnityEngine;
 /// </summary>
 public class NPCDebt : MonoBehaviour, IInteractable
 {
-    public TextMeshProUGUI result_text;
-
     public string GetInteractText() => "빚 상환";
-
-    public string Get_Result_Text() => "상환 완료!";
 
     public void Interact()  // 편의
     {
@@ -22,8 +17,6 @@ public class NPCDebt : MonoBehaviour, IInteractable
 
     public void Interact(InventoryManager _)
     {
-        result_text.gameObject.SetActive(true);
-        Invoke("Inveke", 1);
         var gsm = FindObjectOfType<GameStatsManager>();
         if (gsm == null) { Debug.LogWarning("[NPCDebt] GameStatsManager 없음"); return; }
 
@@ -72,10 +65,5 @@ public class NPCDebt : MonoBehaviour, IInteractable
                 Debug.LogWarning("[NPCDebt] Debt가 읽기전용이고 조정 메서드를 찾지 못했습니다.");
             }
         }
-    }
-    private void Text_off()
-    {
-        result_text.gameObject.SetActive(false);
-
     }
 }

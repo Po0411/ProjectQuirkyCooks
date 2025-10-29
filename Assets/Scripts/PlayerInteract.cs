@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using TMPro;
-using System.Collections;
 
 public class PlayerInteract : MonoBehaviour
 {
@@ -13,7 +12,6 @@ public class PlayerInteract : MonoBehaviour
 
     [Header("UI (선택)")]
     [SerializeField] private TextMeshProUGUI interactTextUI;
-    [SerializeField] private TextMeshProUGUI result_TextUI;
 
     private IInteractable current;
     private InventoryManager inv; // 내 플레이어의 인벤 캐시
@@ -37,7 +35,6 @@ public class PlayerInteract : MonoBehaviour
         }
 
         if (interactTextUI) interactTextUI.gameObject.SetActive(false);
-        if (result_TextUI) result_TextUI.gameObject.SetActive(false);
     }
 
     void Update()
@@ -60,27 +57,22 @@ public class PlayerInteract : MonoBehaviour
                 {
                     interactTextUI.gameObject.SetActive(true);
                     interactTextUI.text = current.GetInteractText();
-                    result_TextUI.text = current.Get_Result_Text();
-                    //result_TextUI.gameObject.SetActive(true);
                 }
 
                 if (Input.GetMouseButtonDown(0))
                 {
                     current.Interact(inv); // 인벤 null이어도 상대 측에서 방어하도록 구현됨
                 }
-
                 return;
             }
         }
-        else HideText();
+
+        HideText();
     }
 
-
-
-    private void HideText(float wait_time=0)
+    private void HideText()
     {
         if (interactTextUI) interactTextUI.gameObject.SetActive(false);
         current = null;
     }
 }
-

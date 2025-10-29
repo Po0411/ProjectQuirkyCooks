@@ -5,15 +5,15 @@ using UnityEngine;
 public class PlayerAttack : MonoBehaviour
 {
     [Header("Attack Settings")]
-    [Tooltip("1È¸ Å¬¸¯´ç ÀÔÈú ÇÇÇØ·®")]
+    [Tooltip("1È¸ Å¬ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ø·ï¿½")]
     public float damage = 500f;
-    [Tooltip("ÃÖ´ë »ç°Å¸®")]
+    [Tooltip("ï¿½Ö´ï¿½ ï¿½ï¿½Å¸ï¿½")]
     public float range = 10f;
-    [Tooltip("¸ó½ºÅÍ ·¹ÀÌ¾î¸¸ Ã¼Å©")]
+    [Tooltip("ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ì¾î¸¸ Ã¼Å©")]
     public LayerMask monsterLayer;
 
     [Header("References")]
-    [Tooltip("ÇÃ·¹ÀÌ¾î ½ÃÁ¡ Ä«¸Þ¶ó")]
+    [Tooltip("ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½ï¿½ï¿½ Ä«ï¿½Þ¶ï¿½")]
     public Camera playerCamera;
 
     void Update()
@@ -25,14 +25,17 @@ public class PlayerAttack : MonoBehaviour
     void TryHit()
     {
         Ray ray = playerCamera.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(ray, out RaycastHit hit, range, monsterLayer))
+        if (GunInOut.gunInOut == true) //<-ì´ê±° ì¶”ê°€í•¨
         {
-            // ¸ó½ºÅÍ Çï½º ÄÄÆ÷³ÍÆ® Å½»ö
-            MonsterHealth mh = hit.collider.GetComponent<MonsterHealth>()
-                             ?? hit.collider.GetComponentInParent<MonsterHealth>();
-            if (mh != null)
+            if (Physics.Raycast(ray, out RaycastHit hit, range, monsterLayer))
             {
-                mh.TakeDamage(damage);
+                // ï¿½ï¿½ï¿½ï¿½ ï¿½ï½º ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® Å½ï¿½ï¿½
+                MonsterHealth mh = hit.collider.GetComponent<MonsterHealth>()
+                 ?? hit.collider.GetComponentInParent<MonsterHealth>();
+                if (mh != null)
+                {
+                    mh.TakeDamage(damage);
+                }
             }
         }
     }

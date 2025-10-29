@@ -2,6 +2,8 @@
 using UnityEngine;
 using Unity.Netcode;
 using UnityEngine.UI;
+using Unity.VisualScripting;
+using UnityEditor.Rendering;
 
 [DisallowMultipleComponent]
 [RequireComponent(typeof(CharacterController))]
@@ -36,9 +38,14 @@ public class PlayerController : NetworkBehaviour
     // 네트워크가 꺼져 있으면(싱글) 항상 조작 허용, 켜져있으면 오너만
     bool HasLocalAuthority => !NetActive || IsOwner;
 
+    //현중이가 추가한 변수
+    public Animator anim;
+
     void Awake()
     {
         controller = GetComponent<CharacterController>();
+
+        anim = GetComponent<Animator>();
     }
 
     void Start()
@@ -107,6 +114,27 @@ public class PlayerController : NetworkBehaviour
         controller.Move(velocity * Time.deltaTime);
 
         UpdateStaminaUI();
+
+
+        //현중이가추가한거~(걷기달리기애니)
+        if (move.magnitude > 0.1)
+        {
+            anim.SetBool("isMoving", true);
+        }
+
+        if (wantsToRun == true && hasStamina == true)
+        {
+            anim.SetBool("isRun", true);
+        }
+        if (wantsToRun == false || stamina < 0.1)
+        {
+            anim.SetBool("isRun", false);
+        }
+
+        if (move.magnitude <= 0)
+        {
+            anim.SetBool("isMoving", false);
+        }
     }
 
     void UpdateStaminaUI()
