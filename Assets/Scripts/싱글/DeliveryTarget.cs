@@ -39,6 +39,7 @@ public class DeliveryTarget : MonoBehaviour, IInteractable
 
     public string GetInteractText() =>
         requiredItem == null ? "주문 없음" : $"{requiredItem.itemName} 배달";
+    public string Get_Result_Text() => "배달 완성!";
 
     public void Interact() => Interact(FindObjectOfType<InventoryManager>(true));
 

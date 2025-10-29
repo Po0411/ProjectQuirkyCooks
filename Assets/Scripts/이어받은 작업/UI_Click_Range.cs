@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 
 public enum Playing_Type { Click, maintain}
 
-public class UI_Click_Range : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler, IPointerExitHandler
+public class UI_Click_Range : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler, IPointerExitHandler, IPointerUpHandler
 {
     public GameObject mini_game_obj;
     public Playing_Type type;
@@ -24,9 +24,21 @@ public class UI_Click_Range : MonoBehaviour, IPointerDownHandler, IPointerEnterH
 
     public void OnPointerDown(PointerEventData data)
     {
+        if (mini_game_obj.GetComponent<CookingMiniGame>().miniGameType == CookingMiniGameType.Grind)
+            mini_game_obj.GetComponent<CookingMiniGame>().is_cliking = true;
         if (type == Playing_Type.Click)
             mini_game_obj.GetComponent<CookingMiniGame>().UI_click_input();//미니게임 진행 중의 상태에 맞는 올바른 동작 실행
     }
+
+    public void OnPointerUp(PointerEventData data)
+    {
+        if (mini_game_obj.GetComponent<CookingMiniGame>().miniGameType == CookingMiniGameType.Grind)
+        {
+            mini_game_obj.GetComponent<CookingMiniGame>().is_cliking = false;
+            mini_game_obj.GetComponent<CookingMiniGame>().UI_click_input();//미니게임 진행 중의 상태에 맞는 올바른 동작 실행
+        }
+    }
+
 
     public void OnPointerEnter(PointerEventData data)
     {

@@ -12,6 +12,8 @@ public class NPCUpgrade : MonoBehaviour, IInteractable
 
     public string GetInteractText() => "업그레이드(체력 슬롯)";
 
+    public string Get_Result_Text() => "업그레이드 완료!";
+
     public void Interact() { Interact(FindObjectOfType<InventoryManager>()); }
 
     public void Interact(InventoryManager _)
