@@ -10,6 +10,7 @@ public enum CookingType { Boil, Fry, Chop, Blend, Grill }
 
 public class CookingStation : MonoBehaviour, IInteractable
 {
+    //테스트 주석
     [Header("조리 도구 설정")]
     public CookingType type;
     public List<string> requiredItemName = new List<string>();//리스트로 변경
