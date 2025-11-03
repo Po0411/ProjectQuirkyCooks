@@ -18,6 +18,12 @@ public class DeliveryTarget : MonoBehaviour, IInteractable
     {
         _ui = FindObjectOfType<DeliveryUIManager>(true);
         RefreshFromUI();
+        switch (regionColor)
+        {
+            case RegionColor.Red: _ui.slots[0].gameObject.SetActive(true); break;
+            case RegionColor.Blue: _ui.slots[1].gameObject.SetActive(true); break;
+            case RegionColor.Green: _ui.slots[2].gameObject.SetActive(true); break;
+        }
         if (_ui != null) _ui.OnRefreshed += RefreshFromUI;
     }
 
@@ -63,6 +69,12 @@ public class DeliveryTarget : MonoBehaviour, IInteractable
 
             // 슬롯 재랜덤 + 거품아이콘 갱신
             _ui?.CompleteAndRerollForColor(regionColor);
+            switch (regionColor)
+            {
+                case RegionColor.Red: _ui.slots[0].gameObject.SetActive(false); break;
+                case RegionColor.Blue: _ui.slots[1].gameObject.SetActive(false); break;
+                case RegionColor.Green: _ui.slots[2].gameObject.SetActive(false); break;
+            }
             RefreshFromUI();
             Debug.Log("배달 완료!");
         }

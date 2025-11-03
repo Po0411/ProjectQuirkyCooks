@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a792d21480846b941b8448d5bce82b69, type: 3}
+  m_Name: M_mill
+  m_EditorClassIdentifier: 
+  itemName: "\uAC04 \uBC00"
+  icon: {fileID: 21300000, guid: 4a37a69ac6ea0e24e8cdb6c90d442d7b, type: 3}
+  maxStack: 4
+  price: 10
+  worldPrefab: {fileID: 4558421917106604687, guid: 65749e75c2ac10243ab85d049d56c11d, type: 3}

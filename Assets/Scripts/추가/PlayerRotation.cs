@@ -15,12 +15,15 @@ public class PlayerRotation : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(1))
         {
-            if(GunInOut.gunInOut == true)
+            if (GunInOut.gunInOut == true)
             {
                 transform.Rotate(Vector3.up, 50, Space.Self);
-                
+
             }
-            else if(GunInOut.gunInOut == false)
+        }
+        if(Input.GetMouseButtonUp(1))
+        {
+            if(GunInOut.gunInOut == false)
             {
                 transform.Rotate(Vector3.up, -50, Space.Self);
             }

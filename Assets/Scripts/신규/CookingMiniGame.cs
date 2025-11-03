@@ -96,7 +96,7 @@ public class CookingMiniGame : MonoBehaviour
     public int now_arrow_num;
     public float max_input_cooltime;
     [SerializeField] float input_cooltime;
-    List<GameObject> ins_arrow_obj = new List<GameObject>();
+    [SerializeField]List<GameObject> ins_arrow_obj = new List<GameObject>();
     int playing_complte_count;
     int count = 0;
     bool is_wait_input = false;
@@ -214,15 +214,15 @@ public class CookingMiniGame : MonoBehaviour
                 case CookingMiniGameType.Grill://굽기
                     {
 
-                        Debug.Log("[현재 카운트 :]"+ count);
+                        //Debug.Log("[현재 카운트 :]"+ count);
 
                         if (count >= arrow_round_count[max_playing_count - playing_count])//입력 전부 받음
                         {
-                            Debug.Log("모든 화살표 입력 완료");
+                            //Debug.Log("모든 화살표 입력 완료");
                             if (playing_complte_count >= arrow_count_target[max_playing_count - playing_count])
                             {
-                                Debug.Log("반복 중 통과");
-                                now_complte_count += 1;
+                               // Debug.Log("반복 중 통과");
+                                playing_complte_count += 1;
                                 break;
                             }
                             //else playing_count = 0;
@@ -231,7 +231,7 @@ public class CookingMiniGame : MonoBehaviour
                         if ((Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W)) && !is_wait_input)
                         {
                             Debug.Log("상");
-                            is_wait_input = true;
+                            //is_wait_input = true;
                             //화살표 스테이더스에서 이미지 변경
                             if (now_arrow_num == 0)
                             {
@@ -239,6 +239,7 @@ public class CookingMiniGame : MonoBehaviour
                                 playing_complte_count += 1;
                                 count += 1;
                             }
+                            else
                             {
                                 ins_arrow_obj[count].GetComponent<Arrow_State>().Arrow_Image_Chage(false);
                                 count += 1;
@@ -247,7 +248,7 @@ public class CookingMiniGame : MonoBehaviour
                         else if ((Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S)) && !is_wait_input)
                         {
                             Debug.Log("하");
-                            is_wait_input = true;
+                            //is_wait_input = true;
                             if (now_arrow_num == 1)
                             {
                                 ins_arrow_obj[count].GetComponent<Arrow_State>().Arrow_Image_Chage(true);
@@ -263,13 +264,14 @@ public class CookingMiniGame : MonoBehaviour
                         else if ((Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A)) && !is_wait_input)
                         {
                             Debug.Log("좌");
-                            is_wait_input = true;
+                            //is_wait_input = true;
                             if (now_arrow_num == 2)
                             {
                                 ins_arrow_obj[count].GetComponent<Arrow_State>().Arrow_Image_Chage(true);
                                 playing_complte_count += 1;
                                 count += 1;
                             }
+                            else
                             {
                                 ins_arrow_obj[count].GetComponent<Arrow_State>().Arrow_Image_Chage(false);
                                 count += 1;
@@ -278,13 +280,14 @@ public class CookingMiniGame : MonoBehaviour
                         else if ((Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D)) && !is_wait_input)
                         {
                             Debug.Log("우");
-                            is_wait_input = true;
+                            //is_wait_input = true;
                             if (now_arrow_num == 3)
                             {
                                 ins_arrow_obj[count].GetComponent<Arrow_State>().Arrow_Image_Chage(true);
                                 playing_complte_count += 1;
                                 count += 1;
                             }
+                            else
                             {
                                 ins_arrow_obj[count].GetComponent<Arrow_State>().Arrow_Image_Chage(false);
                                 count += 1;
@@ -367,7 +370,7 @@ public class CookingMiniGame : MonoBehaviour
                 {
                     if (now_complte_count == max_playing_count)
                         success = true;
-                    else if (now_complte_count >= arrow_count_target[max_playing_count - playing_count])//지금 실패를 카운트 0으로 처리해서 그렇구나
+                    else if (playing_complte_count >= arrow_count_target[max_playing_count - playing_count])//지금 실패를 카운트 0으로 처리해서 그렇구나
                     {
                         Debug.Log("통과");
                         now_complte_count += 1;

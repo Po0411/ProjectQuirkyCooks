@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public enum MonsterType { DaeduMabel, Tomatok, Krang }
@@ -7,6 +8,8 @@ public enum MonsterType { DaeduMabel, Tomatok, Krang }
 [RequireComponent(typeof(CharacterController))]
 public class MonsterAI : MonoBehaviour
 {
+    private bool isDead = false;
+
     [Header("Type & References")]
     public MonsterType type;
     public Transform player;
@@ -61,8 +64,7 @@ public class MonsterAI : MonoBehaviour
 
     void Update()
     {
-        if (isStunned) return;
-
+        if (isDead) return;
         float dist = Vector3.Distance(transform.position, player.position);
 
         // �߰� ���� ����: ���� ���� ���� OR �־���(suspiciousRange �ʰ�)
@@ -178,5 +180,14 @@ public class MonsterAI : MonoBehaviour
     {
         if (!string.IsNullOrEmpty(safeZoneTag) && other.gameObject.tag == safeZoneTag)
             inSafeZone = false;
+    }
+
+    public void NotifyDeath()
+    {
+        isDead = true;
+        if (cc != null)
+        {
+            cc.enabled = false;
+        }
     }
 }

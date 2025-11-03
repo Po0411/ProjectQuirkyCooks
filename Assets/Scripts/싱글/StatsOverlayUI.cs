@@ -36,6 +36,7 @@ public class StatsOverlayUI : MonoBehaviour
     {
         if (panel == null) panel = gameObject;
         if (hideOnStart) panel.SetActive(false);
+        RefreshTexts();
     }
 
     void Update()
@@ -57,7 +58,7 @@ public class StatsOverlayUI : MonoBehaviour
                 if (panel.activeSelf) RefreshTexts();
             }
         }
-
+        RefreshTexts();
         // 패널이 열려 있을 때마다 계속 갱신하고 싶으면 주석 해제
         // if (panel.activeSelf) RefreshTexts();
     }

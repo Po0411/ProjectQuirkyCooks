@@ -23,7 +23,12 @@ public class GunInOut : MonoBehaviour
         {
             gunInOut = !gunInOut;
             anim.SetBool("gunOut", gunInOut);
-            
+
+        }
+        else if(Input.GetMouseButtonUp(1))
+        {
+            gunInOut = !gunInOut;
+            anim.SetBool("gunOut", gunInOut);
         }
 
         if (hidingObject != null && gunInOut == true)

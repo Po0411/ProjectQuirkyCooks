@@ -249,6 +249,7 @@ GameObject:
   - component: {fileID: 7790857478950982008}
   - component: {fileID: 7788092433399315223}
   - component: {fileID: 276828152795313903}
+  - component: {fileID: 1051477754716710426}
   m_Layer: 9
   m_Name: Tomadog
   m_TagString: Untagged
@@ -341,6 +342,27 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0.03, z: 0}
+--- !u!95 &1051477754716710426
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1286610256131104850}
+  m_Enabled: 1
+  m_Avatar: {fileID: 9000000, guid: 6a6f0587fc7859a409a9fb5160be706e, type: 2}
+  m_Controller: {fileID: 9100000, guid: 5995953a2cb419d48b84318931183e49, type: 2}
+  m_CullingMode: 1
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &6659776256762638823
 GameObject:
   m_ObjectHideFlags: 0
@@ -555,7 +577,8 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 230cbe79aacd99c4a8bda8ee5eb80ebc, type: 2}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 5866666021909216657, guid: f8d880a5669a5f744ae083e62535a972, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

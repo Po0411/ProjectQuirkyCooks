@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class MonsterHealth : MonoBehaviour
 {
+    private Animator anim;
+    private bool isDead;
+    private MonsterAI monsterAi;
+
     [Header("HP Settings")]
     public float maxHp = 5000f;
     private float currentHp;
@@ -22,6 +26,9 @@ public class MonsterHealth : MonoBehaviour
 
     void Start()
     {
+        anim = GetComponent<Animator>();
+        monsterAi = GetComponent<MonsterAI>();
+
         currentHp = maxHp;
         if (healthBar != null)
             healthBar.SetHealthFraction(1f);
@@ -32,6 +39,8 @@ public class MonsterHealth : MonoBehaviour
     /// </summary>
     public void TakeDamage(float amount)
     {
+        if (isDead) return;
+
         currentHp = Mathf.Max(0f, currentHp - amount);
 
         if(GunInOut.gunInOut == true)//현중 If GunInOut 추가함
@@ -48,13 +57,16 @@ public class MonsterHealth : MonoBehaviour
 
     void Die()
     {
+        isDead = true;
+        anim.SetBool("isDead", true);
+        monsterAi.NotifyDeath();
+
         SpawnMeat();
 
-        MonsterDead.isDead = true;
+        //MonsterDead.isDead = true;
 
-        
         // (���Ѵٸ� ��� ����Ʈ, ���� �� �߰�)
-        Destroy(gameObject);
+        Destroy(gameObject, 1.5f);
     }
 
     void SpawnMeat()

@@ -8,25 +8,48 @@ public class ModeSelectUI : MonoBehaviour
 {
     [SerializeField] string soloSceneName = "MainLevel";
 
-    // �̱� ī��/��ư OnClick �� ����
+    public GameObject soloButton;
+
+    private AudioSource audioSource;
+
+    public AudioClip hovering;
+
+    void Start()
+    {
+        audioSource = GetComponent<AudioSource>();
+    }
+
+
+
     public void OnClickSolo()
     {
         GameModeState.Current = GameMode.Solo;
 
-        // Ȥ�� �����Ϳ��� ȣ��Ʈ/Ŭ�� ���� ���¸� ����
-#if UNITY_NETCODE_GAMEOBJECTS
-        if (NetworkManager.Singleton != null && NetworkManager.Singleton.IsListening)
-        {
-            NetworkManager.Singleton.Shutdown();
-        }
-#endif
+        #if UNITY_NETCODE_GAMEOBJECTS
+            if (NetworkManager.Singleton != null && NetworkManager.Singleton.IsListening)
+            {
+                NetworkManager.Singleton.Shutdown();
+            }
+        #endif
         SceneManager.LoadScene(soloSceneName, LoadSceneMode.Single);
     }
 
-    // (����) ��Ƽ ��ư��
-    public void OnClickMulti(string lobbySceneName = "ChannelScene")
+        // // (����) ��Ƽ ��ư��
+        // public void OnClickMulti(string lobbySceneName = "ChannelScene")
+        // {
+        //     GameModeState.Current = GameMode.Multi;
+        //     SceneManager.LoadScene(lobbySceneName, LoadSceneMode.Single);
+        // }
+    
+    
+    public void Hovering()
     {
-        GameModeState.Current = GameMode.Multi;
-        SceneManager.LoadScene(lobbySceneName, LoadSceneMode.Single);
+        soloButton.SetActive(true);
+        audioSource.PlayOneShot(hovering);
+    }
+
+    public void Hide()
+    {
+        soloButton.SetActive(false);
     }
 }
