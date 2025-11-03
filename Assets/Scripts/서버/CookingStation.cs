@@ -71,7 +71,7 @@ public class CookingStation : MonoBehaviour, IInteractable
         string result_item = "";
         bool name_input = false;
 
-        Debug.Log(input.itemName);
+        //Debug.Log(input.itemName);
 
         if(result_text != null)result_text.gameObject.SetActive(true);
         Invoke("Text_off", 1f);

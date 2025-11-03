@@ -76,6 +76,7 @@ public class DeliveryTarget : MonoBehaviour, IInteractable
                 case RegionColor.Green: _ui.slots[2].gameObject.SetActive(false); break;
             }
             RefreshFromUI();
+            Destroy(gameObject);
             Debug.Log("배달 완료!");
         }
         else
