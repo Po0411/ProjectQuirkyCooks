@@ -49,8 +49,10 @@ public class CookingMiniGame : MonoBehaviour
     [Header("미니게임 UI")]
     public GameObject mini_game_UI;
     public MouseLook mouseLook;
+    public CameraRotation camera_rotation;
     public PlayerController player_controller;
     public bool is_not_minigame;
+    public InventoryManager inven_MG;
     [Header("횟수")]
     public int max_playing_count;   
     [SerializeField] private int playing_count;
@@ -129,6 +131,8 @@ public class CookingMiniGame : MonoBehaviour
         if(!is_not_minigame) mini_game_UI.SetActive(true);
         mouseLook.enabled = false;
         player_controller.enabled = false;
+        camera_rotation.enabled = false;
+        inven_MG.enabled = false;
         //움직임, 인벤토리 락
         playing_count = max_playing_count;
         //쿨타임 설정(여러개면 여러개를 설정, 아니면 걍 진행
@@ -461,6 +465,8 @@ public class CookingMiniGame : MonoBehaviour
         mini_game_state = Cooking_State.Finishd;
         mouseLook.enabled = true;
         player_controller.enabled = true;
+        camera_rotation.enabled = true;
+        inven_MG.enabled = true;
         if (!is_not_minigame)
         {
             mini_game_UI.SetActive(false);

@@ -45,7 +45,7 @@ public class CookingStation : MonoBehaviour, IInteractable
         if (inventory.slots[inventory.selectedIndex].currentItem == null) return;
 
         mini_game_sc.OnCompleted.AddListener(Result_Chake);//이벤트 구독
-        gameObject.GetComponentInChildren<BoxCollider>().enabled = false;
+        gameObject.GetComponent<BoxCollider>().enabled = false;
         mini_game_sc.StartMiniGame();
 
         In_Mg = inventory;
@@ -138,7 +138,7 @@ public class CookingStation : MonoBehaviour, IInteractable
 
     private void Collider_OFF()
     {
-        gameObject.GetComponentInChildren<BoxCollider>().enabled = true;
+        gameObject.GetComponent<BoxCollider>().enabled = true;
     }
     private void Text_off()
     {
