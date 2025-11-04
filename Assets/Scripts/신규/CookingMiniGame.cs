@@ -478,7 +478,7 @@ public class CookingMiniGame : MonoBehaviour
     {
         StopAllCoroutines();
         running = false;
-        timer_text.text = "0";
+        timer_text.text = "Ready?";
         //playing_count = 0;
         switch (miniGameType)
         {

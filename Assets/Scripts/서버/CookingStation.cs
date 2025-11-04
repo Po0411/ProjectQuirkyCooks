@@ -72,7 +72,7 @@ public class CookingStation : MonoBehaviour, IInteractable
         string result_item = "";
         bool name_input = false;
 
-        //Debug.Log(input.itemName);
+        Debug.Log(input.itemName);
 
         if(result_text != null)result_text.gameObject.SetActive(true);
         Invoke("Text_off", 1f);
@@ -131,7 +131,7 @@ public class CookingStation : MonoBehaviour, IInteractable
 
         }
         else Debug.Log("실패");
-
+        mini_game_sc.OnCompleted.RemoveListener(Result_Chake);//이벤트 구독
         Invoke("Collider_OFF", col_on_time);
     }
 
