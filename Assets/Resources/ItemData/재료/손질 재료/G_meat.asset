@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a792d21480846b941b8448d5bce82b69, type: 3}
-  m_Name: G_meat
+  m_Name: G_Meat
   m_EditorClassIdentifier: 
   itemName: "\uAD6C\uC6B4 \uACE0\uAE30"
-  icon: {fileID: 21300000, guid: 1c1f71c7c6c595443aff510f542b2e5d, type: 3}
+  icon: {fileID: 21300000, guid: 8e9a77a4d4c0fa749ac9f197cbe3df04, type: 3}
   maxStack: 4
   price: 10
-  worldPrefab: {fileID: 3692255165730023745, guid: 0ee9a1a7d600efb4d826ad995efbada4, type: 3}
+  worldPrefab: {fileID: 8672963308364505736, guid: f857b904ae8fb74429d1a8a0fc3e1e01, type: 3}

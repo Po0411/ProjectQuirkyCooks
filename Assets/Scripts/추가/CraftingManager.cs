@@ -76,9 +76,16 @@ public class CraftingManager : MonoBehaviour
 
         foreach (var item in containerItems)
         {
-            if (item.itemName == "햄버거" || item.itemName == "옥수수 스프" || item.itemName == "감자튀김")
+            if (item.itemName == "햄버거" || item.itemName == "옥수수 수프" || item.itemName == "감자튀김" || item.itemName == "주스" || item.itemName == "샐러드" || item.itemName == "스테이크")
             {
                 ShowAlert("완성된 음식은 조리할 수 없습니다!");
+                ReturnAll();
+                return;
+            }
+
+            if (item.itemName == "실패음식")
+            {
+                ShowAlert("쓰레기는 조리할 수 없습니다!");
                 ReturnAll();
                 return;
             }
@@ -149,8 +156,10 @@ public class CraftingManager : MonoBehaviour
     void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("CraftingZone"))
+        {
             isInZone = true;
-        ShowAlert("E : 재료투입 / C : 요리시작");
+            ShowAlert("E : 재료투입 / C : 요리시작");
+        }
     }
 
     void OnTriggerExit(Collider other)

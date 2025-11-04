@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a792d21480846b941b8448d5bce82b69, type: 3}
   m_Name: M_meat
   m_EditorClassIdentifier: 
-  itemName: "\uAC04 \uACE0\uAE30"
+  itemName: "\uB2E4\uC9C4 \uACE0\uAE30"
   icon: {fileID: 21300000, guid: b17579d70a80bd84e8d76865d7081107, type: 3}
   maxStack: 4
   price: 10

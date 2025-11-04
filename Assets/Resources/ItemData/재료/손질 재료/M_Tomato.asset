@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a792d21480846b941b8448d5bce82b69, type: 3}
+  m_Name: M_Tomato
+  m_EditorClassIdentifier: 
+  itemName: "\uC790\uB978 \uD1A0\uB9C8\uD1A0"
+  icon: {fileID: 21300000, guid: 8f808dc2fa8b0784d92142dc9a2104ff, type: 3}
+  maxStack: 4
+  price: 10
+  worldPrefab: {fileID: 8253765213379617662, guid: e703081ee1a2be143a44412e50a5efb8, type: 3}

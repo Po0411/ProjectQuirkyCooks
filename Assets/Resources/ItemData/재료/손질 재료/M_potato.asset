@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a792d21480846b941b8448d5bce82b69, type: 3}
   m_Name: M_potato
   m_EditorClassIdentifier: 
-  itemName: "\uAC04 \uAC10\uC790"
+  itemName: "\uC790\uB978 \uAC10\uC790"
   icon: {fileID: 21300000, guid: 38e878726a6fa5a44878504cdc265e02, type: 3}
   maxStack: 4
   price: 10
-  worldPrefab: {fileID: 1563682599150059061, guid: 6b483e8b0c02f8447b8262f3c8b1bc89, type: 3}
+  worldPrefab: {fileID: 8319746493599146834, guid: f6f57db8a914c4044af52ee9d92e50f5, type: 3}

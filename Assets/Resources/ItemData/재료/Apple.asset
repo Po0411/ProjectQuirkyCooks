@@ -15,4 +15,5 @@ MonoBehaviour:
   itemName: "\uC0AC\uACFC"
   icon: {fileID: 21300000, guid: 8dd1b15773a99dd44b0e40c05e20cc04, type: 3}
   maxStack: 4
-  worldPrefab: {fileID: 458683740065219655, guid: 95538d08474baaa4ca4bfdc68ac76622, type: 3}
+  price: 10
+  worldPrefab: {fileID: 458683740065219655, guid: 396e14d235a4d2744a45169195d7cd9c, type: 3}
