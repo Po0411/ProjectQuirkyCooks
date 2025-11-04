@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: M_G_Meat
   m_EditorClassIdentifier: 
   itemName: "\uD328\uD2F0"
-  icon: {fileID: 21300000, guid: b17579d70a80bd84e8d76865d7081107, type: 3}
+  icon: {fileID: 21300000, guid: 8e9a77a4d4c0fa749ac9f197cbe3df04, type: 3}
   maxStack: 4
   price: 10
-  worldPrefab: {fileID: 3692255165730023745, guid: 0ee9a1a7d600efb4d826ad995efbada4, type: 3}
+  worldPrefab: {fileID: 5950807779542101104, guid: 0ef26b6813377694a975ea52fa2c2b6f, type: 3}

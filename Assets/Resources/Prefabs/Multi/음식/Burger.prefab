@@ -132,7 +132,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 2740270054
+  GlobalObjectIdHash: 910214017
   InScenePlacedSourceGlobalObjectIdHash: 0
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -154,6 +154,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemData: {fileID: 11400000, guid: cabf2125b58d015418ea806b0cb28508, type: 2}
+  maxDistance: 3
+  interactKey: 101
 --- !u!114 &6419586730833355232
 MonoBehaviour:
   m_ObjectHideFlags: 0
