@@ -1,5 +1,8 @@
 using System;
+using Unity.Services.Lobbies.Models;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.TextCore.Text;
 
 /// <summary>
 /// 가진 현금 한도로 빚을 갚는다. GameStatsManager의 Cash/Debt가
@@ -8,6 +11,17 @@ using UnityEngine;
 public class NPCDebt : MonoBehaviour, IInteractable
 {
     public string GetInteractText() => "빚 상환";
+
+    public string sceneName = "Clear";
+    private int loaded = 0;
+    
+    void Update()
+    {   
+        if(loaded == 0)
+        {
+            CheckForVictory();
+        }
+    }
 
     public void Interact()  // 편의
     {
@@ -65,5 +79,31 @@ public class NPCDebt : MonoBehaviour, IInteractable
                 Debug.LogWarning("[NPCDebt] Debt가 읽기전용이고 조정 메서드를 찾지 못했습니다.");
             }
         }
+    }
+
+    // --- 추가된 함수: 빚이 0인지 확인 ---
+    private void CheckForVictory()
+    {
+        if(GameStatsManager.debtReduce == true)
+        {
+            Debug.Log("🎉 빚을 모두 갚았습니다! 클리어 씬을 로드합니다.");
+            LoadClearScene();
+            loaded++;
+        }
+    }
+
+    // --- 추가된 함수: 클리어 씬 로드 및 게임 중지 ---
+    private void LoadClearScene()
+    {
+        // 2. 클리어 씬을 현재 씬 위에 추가(Additive) 로드하여 오버랩
+        if (string.IsNullOrEmpty(sceneName))
+        {
+            Debug.LogError("[NPCDebt] clearSceneName이 설정되지 않았습니다. 씬 이름을 Inspector에서 설정하세요.");
+            return;
+        }
+
+        // 씬 빌드 설정에 'clearSceneName' 씬이 추가되어 있어야 합니다.
+        SceneManager.LoadScene(sceneName, LoadSceneMode.Additive);
+        loaded++;
     }
 }

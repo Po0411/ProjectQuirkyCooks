@@ -47,6 +47,8 @@ public class GameStatsManager : MonoBehaviour
     private PlayerStats local;
     private bool financeInitialized;
 
+    public static bool debtReduce = false;
+
     // ───────────────────────────── Lifecycle ─────────────────────────────
     void Awake()
     {
@@ -62,6 +64,14 @@ public class GameStatsManager : MonoBehaviour
         {
             SetStartMoney(startingCash, randomDebtMin, randomDebtMax);
             ResetRoundStats();
+        }
+    }
+
+    void Update()
+    {
+        if(debt == 0)
+        {
+            debtReduce = true;
         }
     }
 

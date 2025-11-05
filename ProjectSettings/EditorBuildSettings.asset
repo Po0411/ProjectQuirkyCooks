@@ -23,4 +23,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/GameScene/GameSolo/MainLevel.unity
     guid: 3ee58d71d7e706842908c2c25a8e9dd2
+  - enabled: 1
+    path: Assets/Scenes/GameScene/Clear.unity
+    guid: 6c0d8242b22d20342a8829fc0e445d12
   m_configObjects: {}
