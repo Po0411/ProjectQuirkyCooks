@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,6 +11,11 @@ public class PlayerHealth : MonoBehaviour
     public Image[] hpSegments;
     public Sprite filledSprite;
     public Sprite emptySprite;
+
+    public Vector3 respown_pos;
+    public GameObject respwn_text;
+    public Animator pade_anim;
+    public CameraRotation rotation;
 
     private Animator anim;//현중
 
@@ -27,6 +33,18 @@ public class PlayerHealth : MonoBehaviour
 
         currentHpSlots = maxHpSlots;
         UpdateHpUI();
+    }
+
+    private void Update()
+    {
+        if (isDead)
+        {
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                pade_anim.gameObject.SetActive(true);
+                Invoke("RestoreFullHp", 1f);//인보크로 변경
+            }
+        }
     }
 
     public void TakeDamageSlots(int slots)
@@ -74,7 +92,9 @@ public class PlayerHealth : MonoBehaviour
     {
         isDead = true;
         Debug.Log("사망");
-        anim.SetBool("isDead", true);
+        anim.SetTrigger("isDead");
+
+        respwn_text.gameObject.SetActive(true);//리스폰 안내 텍스트 활어화
 
         var controller = GetComponent<PlayerController>();
         if (controller != null) controller.enabled = false;
@@ -83,6 +103,7 @@ public class PlayerHealth : MonoBehaviour
         {
             var mouseLook = playerCamera.GetComponent<MouseLook>();
             if (mouseLook != null) mouseLook.enabled = false;
+            rotation.enabled = false;
         }
 
         Cursor.lockState = CursorLockMode.None;
@@ -91,9 +112,13 @@ public class PlayerHealth : MonoBehaviour
 
     public void RestoreFullHp()
     {
+        gameObject.transform.position = respown_pos;
+        anim.SetTrigger("Respwn");
+        pade_anim.SetTrigger("pade_in");//연출 추가
         currentHpSlots = maxHpSlots;
         UpdateHpUI();
         isDead = false;
+        respwn_text.gameObject.SetActive(false);    
 
         var controller = GetComponent<PlayerController>();
         if (controller != null) controller.enabled = true;
@@ -102,9 +127,16 @@ public class PlayerHealth : MonoBehaviour
         {
             var mouseLook = playerCamera.GetComponent<MouseLook>();
             if (mouseLook != null) mouseLook.enabled = true;
+            rotation.enabled = true;
         }
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Dead_Line"))
+            Die();
     }
 }
