@@ -107,7 +107,7 @@ public class CookingStation : MonoBehaviour, IInteractable
             }
             if (!name_input)
             {
-                Debug.Log("실패");
+                Debug.Log("아이템 변환 실패");
                 result_item = fail_result_item_name;
             }
 
@@ -131,6 +131,7 @@ public class CookingStation : MonoBehaviour, IInteractable
 
         }
         else Debug.Log("실패");
+
         mini_game_sc.OnCompleted.RemoveListener(Result_Chake);//이벤트 구독
         Invoke("Collider_OFF", col_on_time);
     }

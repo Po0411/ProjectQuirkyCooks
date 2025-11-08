@@ -138,7 +138,7 @@ public class CookingMiniGame : MonoBehaviour
         //쿨타임 설정(여러개면 여러개를 설정, 아니면 걍 진행
         switch (miniGameType)
         {
-            /*            case CookingMiniGameType.Boil: line_slider.value = Random.Range(0f, 1f);break;*/
+            case CookingMiniGameType.Boil: line_slider.value = Random.Range(0f, 1f); break;
             case CookingMiniGameType.Grill:
                 {
                     now_complte_count = 0;
@@ -199,15 +199,15 @@ public class CookingMiniGame : MonoBehaviour
                         fill_obj.GetComponent<Image>().fillAmount = now_num / target_num;
                     }
                     break;
-/*                case CookingMiniGameType.Plate://플레이팅
+                case CookingMiniGameType.Plate://플레이팅
                     {
                     }
                     break;
                 case CookingMiniGameType.Fry://튀기기
                     {
                     }
-                    break;*/
-/*                case CookingMiniGameType.Boil://끓이기
+                    break;
+                case CookingMiniGameType.Boil://끓이기
                     {
                         if (L_R) B_slider.value += line_move_speed * Time.deltaTime;
                         else B_slider.value -= line_move_speed * Time.deltaTime;
@@ -215,7 +215,7 @@ public class CookingMiniGame : MonoBehaviour
                         if (B_slider.value == 1) L_R = false;
                         if (B_slider.value == 0) L_R = true;
                     }
-                    break;*/
+                    break;
                 case CookingMiniGameType.Grill://굽기
                     {
 
@@ -304,54 +304,54 @@ public class CookingMiniGame : MonoBehaviour
                         //전부 완료했을떄, 카운트가 이번 반복의 정답 횟수 이상이라면, 성공, 아니면 실패
                         //생성 방식은 프리팹에서 소환
                     } break;
-                /* case CookingMiniGameType.Grind:
-                     {
-                         if (L_R_switch) G_line_slider.value += Mathf.Clamp(G_line_move_speed * Time.deltaTime, 0, 1);
-                         else G_line_slider.value -= Mathf.Clamp(G_line_move_speed * Time.deltaTime, 0, 1);
+                case CookingMiniGameType.Grind:
+                    {
+                        if (L_R_switch) G_line_slider.value += Mathf.Clamp(G_line_move_speed * Time.deltaTime, 0, 1);
+                        else G_line_slider.value -= Mathf.Clamp(G_line_move_speed * Time.deltaTime, 0, 1);
 
-                         if (G_line_slider.value == max_bar_move_range) L_R_switch = false;
-                         else if (G_line_slider.value <= min_bar_move_range) L_R_switch = true;
+                        if (G_line_slider.value == max_bar_move_range) L_R_switch = false;
+                        else if (G_line_slider.value <= min_bar_move_range) L_R_switch = true;
 
 
-                         if (G_line_slider.value >= max_bar_move_range - 0.001f)
-                         {
-                             L_R_switch = false;
-                             if (max_bar_move_range < 1)
-                                 max_bar_move_range += Mathf.Clamp(0.1f, 0f, 1f);
-                             else max_bar_move_range = 1;
-                         }
-                         else if (G_line_slider.value <= min_bar_move_range - 0.001f)
-                         {
-                             L_R_switch = true;
-                             if (min_bar_move_range > 0)
-                                 min_bar_move_range -= Mathf.Clamp(0.1f, 0f, 1f);
-                             else min_bar_move_range = 0;
-                         }
-                         //yield return null;
-                         bar_move_speed += 0.01f;
+                        if (G_line_slider.value >= max_bar_move_range - 0.001f)
+                        {
+                            L_R_switch = false;
+                            if (max_bar_move_range < 1)
+                                max_bar_move_range += Mathf.Clamp(0.1f, 0f, 1f);
+                            else max_bar_move_range = 1;
+                        }
+                        else if (G_line_slider.value <= min_bar_move_range - 0.001f)
+                        {
+                            L_R_switch = true;
+                            if (min_bar_move_range > 0)
+                                min_bar_move_range -= Mathf.Clamp(0.1f, 0f, 1f);
+                            else min_bar_move_range = 0;
+                        }
+                        //yield return null;
+                        bar_move_speed += 0.01f;
 
-                         if (is_cliking)
-                         {
-                             Debug.Log("눌러짐");
-                             G_slider.value += G_move_speed * Time.deltaTime;
-                         }
-                         else
-                         {
-                             Debug.Log("때짐");
-                             G_slider.value -= G_move_speed * Time.deltaTime;
-                         }
+                        if (is_cliking)
+                        {
+                            Debug.Log("눌러짐");
+                            G_slider.value += G_move_speed * Time.deltaTime;
+                        }
+                        else
+                        {
+                            Debug.Log("때짐");
+                            G_slider.value -= G_move_speed * Time.deltaTime;
+                        }
 
-                         if (G_slider.value > G_line_slider.value - 0.1f && G_slider.value < G_line_slider.value + 0.1f)//오차범위 +-0.1
-                         {
-                             taget_slider.fillAmount += fill_plus_num * Time.deltaTime;
-                             if (taget_slider.fillAmount == 1)
-                             {
-                                 success = true;
-                                 End_Mini_Game();
-                             }
-                         }
-                     }
-                     break;*/
+                        if (G_slider.value > G_line_slider.value - 0.1f && G_slider.value < G_line_slider.value + 0.1f)//오차범위 +-0.1
+                        {
+                            taget_slider.fillAmount += fill_plus_num * Time.deltaTime;
+                            if (taget_slider.fillAmount == 1)
+                            {
+                                success = true;
+                                End_Mini_Game();
+                            }
+                        }
+                    }
+                    break;
                 default:
                     {
                       if(is_not_minigame)   success = true;
@@ -364,12 +364,12 @@ public class CookingMiniGame : MonoBehaviour
 
         switch (miniGameType)
         {
-/*            case CookingMiniGameType.Boil:
+            case CookingMiniGameType.Boil:
                 {
                     if (is_not_click)
                         playing_count = 0;
                 }
-                break;*/
+                break;
             case CookingMiniGameType.Grill:
                 {
                     if (playing_complte_count >= arrow_count_target[max_playing_count - playing_count])//지금 실패를 카운트 0으로 처리해서 그렇구나
@@ -377,12 +377,11 @@ public class CookingMiniGame : MonoBehaviour
                         Debug.Log("통과");
                         now_complte_count += 1;
                     }
-                    else if (now_complte_count == max_playing_count)
+                    if (now_complte_count == max_playing_count)
                     {
                         Debug.Log("조건 충족");
                         success = true;
                     }
-                    else playing_count = 0;
                 }
                 break;
         }
@@ -417,19 +416,19 @@ public class CookingMiniGame : MonoBehaviour
                     //이건 그냥 플레이팅인듯?
                 }
                 break;
-/*            case CookingMiniGameType.Fry://튀기기
+            case CookingMiniGameType.Fry://튀기기
                 {
                     //특정 초의 이후, 이내의 범위 내에서 버튼을 누른다
                     //이건 기다렸다가 하는건가? 시간초맞추기?
                 }
-                break;*/
-/*            case CookingMiniGameType.Boil://끓이기
+                break;
+            case CookingMiniGameType.Boil://끓이기
                 {
 
                     //일정위치에 움직이는 선을 멈추게한다. 
-                    if (line_slider.value > B_slider.value - 0.1f && line_slider.value < B_slider.value + 0.1f)//오차범위 +-0.1
+                    if (line_slider.value > B_slider.value - 0.15f && line_slider.value < B_slider.value + 0.15f)//오차범위 +-0.1
                     {
-                        Debug.Log("통과");
+                        Debug.Log("현재 값"+ B_slider.value+"현제 기준"+ line_slider.value);
                         playing_count -= 1;
                         Debug.LogWarning(playing_count);
                         if (playing_count <= 0)
@@ -448,11 +447,10 @@ public class CookingMiniGame : MonoBehaviour
                     }
                     else End_Mini_Game();
                 }
-                break;*/
+                break;
             case CookingMiniGameType.Grill://굽기
                 {
-                    //제시된 방향키나 wasd를 누른다 
-                    //일단 랜덤으로 0~3의 숫자 생성(방향키), 생성 최대 갯수, 최소개수
+                    
                 }
                 break;
         }
@@ -491,22 +489,22 @@ public class CookingMiniGame : MonoBehaviour
                     fill_obj.GetComponent<Image>().fillAmount = 0;
                 }
                 break;
-            /* case CookingMiniGameType.Grind:
-                 {
-                     L_R_switch = false;
-                     max_bar_move_range = 0.6f;
-                     min_bar_move_range = 0.4f;
-                     bar_move_speed = 1f;
-                     G_slider.value = 0.5f;
-                 }
-                 break;
-             case CookingMiniGameType.Boil://끓이기
-                 {
-                     B_slider.value = 0.5f;
-                     B_move_speed = 1;
-                     L_R = false;
-                 }
-                 break;*/
+            case CookingMiniGameType.Grind:
+                {
+                    L_R_switch = false;
+                    max_bar_move_range = 0.6f;
+                    min_bar_move_range = 0.4f;
+                    bar_move_speed = 1f;
+                    G_slider.value = 0.5f;
+                }
+                break;
+            case CookingMiniGameType.Boil://끓이기
+                {
+                    B_slider.value = 0.5f;
+                    B_move_speed = 1;
+                    L_R = false;
+                }
+                break;
             case CookingMiniGameType.Grill://굽기
                 {
                     arrow_list.Clear();
