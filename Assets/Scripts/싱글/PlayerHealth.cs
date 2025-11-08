@@ -90,6 +90,7 @@ public class PlayerHealth : MonoBehaviour
 
     private void Die()
     {
+        pade_anim.gameObject.SetActive(false);//리스폰 안내 텍스트 활어화
         isDead = true;
         Debug.Log("사망");
         anim.SetTrigger("isDead");
