@@ -1814,7 +1814,7 @@ MonoBehaviour:
   - {fileID: 1827937336}
   filledSprite: {fileID: 21300000, guid: 300f75d54963b1f42b2199d121558661, type: 3}
   emptySprite: {fileID: 21300000, guid: 4d7ef6155440ef442b7e9a97caab6d46, type: 3}
-  respown_pos: {x: 0, y: 0.15, z: 0}
+  respown_pos: {x: 0, y: 0, z: 0}
   respwn_text: {fileID: 993495754}
   pade_anim: {fileID: 479872329}
   rotation: {fileID: 1287619332}

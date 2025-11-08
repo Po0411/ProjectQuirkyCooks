@@ -42,7 +42,7 @@ public class PlayerHealth : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.E))
             {
                 pade_anim.gameObject.SetActive(true);
-                Invoke("RestoreFullHp", 1f);//인보크로 변경
+                StartCoroutine(RestoreFullHp());
             }
         }
     }
@@ -90,12 +90,11 @@ public class PlayerHealth : MonoBehaviour
 
     private void Die()
     {
-        pade_anim.gameObject.SetActive(false);//리스폰 안내 텍스트 활어화
         isDead = true;
         Debug.Log("사망");
         anim.SetTrigger("isDead");
 
-        respwn_text.gameObject.SetActive(true);//리스폰 안내 텍스트 활어화
+        respwn_text.gameObject.SetActive(true);//리스폰 안내 텍스트 활성화
 
         var controller = GetComponent<PlayerController>();
         if (controller != null) controller.enabled = false;
@@ -111,15 +110,18 @@ public class PlayerHealth : MonoBehaviour
         Cursor.visible = true;
     }
 
-    public void RestoreFullHp()
+    public IEnumerator RestoreFullHp()
     {
+        yield return new WaitForSeconds(2.5f);
         gameObject.transform.position = respown_pos;
-        anim.SetTrigger("Respwn");
         pade_anim.SetTrigger("pade_in");//연출 추가
+        anim.SetTrigger("Respwn");
+        respwn_text.gameObject.SetActive(false);
         currentHpSlots = maxHpSlots;
         UpdateHpUI();
+        yield return new WaitForSeconds(1f);
+        pade_anim.gameObject.SetActive(false);
         isDead = false;
-        respwn_text.gameObject.SetActive(false);    
 
         var controller = GetComponent<PlayerController>();
         if (controller != null) controller.enabled = true;
