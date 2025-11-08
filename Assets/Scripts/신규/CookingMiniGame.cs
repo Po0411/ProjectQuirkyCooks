@@ -100,7 +100,7 @@ public class CookingMiniGame : MonoBehaviour
     [SerializeField] float input_cooltime;
     [SerializeField]List<GameObject> ins_arrow_obj = new List<GameObject>();
     int playing_complte_count;
-    int count = 0;
+    public int count = 0;
     bool is_wait_input = false;
 
     [Tooltip("Event invoked when the mini‑game finishes. The boolean indicates success (true) or failure (false).")]
@@ -141,6 +141,7 @@ public class CookingMiniGame : MonoBehaviour
             /*            case CookingMiniGameType.Boil: line_slider.value = Random.Range(0f, 1f);break;*/
             case CookingMiniGameType.Grill:
                 {
+                    now_complte_count = 0;
                     for (int i = 0; i < arrow_round_count[max_playing_count - playing_count]; i++)
                     {
                         //Debug.Log(arrow_round_count[max_playing_count - playing_count]);
@@ -218,15 +219,14 @@ public class CookingMiniGame : MonoBehaviour
                 case CookingMiniGameType.Grill://굽기
                     {
 
-                        //Debug.Log("[현재 카운트 :]"+ count);
+                        Debug.Log("[현재 카운트 :]"+ playing_complte_count);
 
                         if (count >= arrow_round_count[max_playing_count - playing_count])//입력 전부 받음
                         {
                             //Debug.Log("모든 화살표 입력 완료");
                             if (playing_complte_count >= arrow_count_target[max_playing_count - playing_count])
                             {
-                               // Debug.Log("반복 중 통과");
-                                playing_complte_count += 1;
+                                Debug.Log("반복 중 통과");
                                 break;
                             }
                             //else playing_count = 0;
@@ -372,12 +372,15 @@ public class CookingMiniGame : MonoBehaviour
                 break;*/
             case CookingMiniGameType.Grill:
                 {
-                    if (now_complte_count == max_playing_count)
-                        success = true;
-                    else if (playing_complte_count >= arrow_count_target[max_playing_count - playing_count])//지금 실패를 카운트 0으로 처리해서 그렇구나
+                    if (playing_complte_count >= arrow_count_target[max_playing_count - playing_count])//지금 실패를 카운트 0으로 처리해서 그렇구나
                     {
                         Debug.Log("통과");
                         now_complte_count += 1;
+                    }
+                    else if (now_complte_count == max_playing_count)
+                    {
+                        Debug.Log("조건 충족");
+                        success = true;
                     }
                     else playing_count = 0;
                 }
@@ -507,10 +510,12 @@ public class CookingMiniGame : MonoBehaviour
             case CookingMiniGameType.Grill://굽기
                 {
                     arrow_list.Clear();
-                    now_complte_count = 0;
+                    playing_complte_count = 0;
+                    now_arrow_num = 0;
+                    count = 0;
 
                     for (int i = 0; i < ins_arrow_obj.Count; i++) Destroy(ins_arrow_obj[i]);
-                    ins_arrow_obj.Clear();
+                        ins_arrow_obj.Clear();
                     //화살표 다시 설정`
                     if (playing_count > 0)
                     {

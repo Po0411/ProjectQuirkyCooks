@@ -15,6 +15,7 @@ public class PlayerHealth : MonoBehaviour
     public Vector3 respown_pos;
     public GameObject respwn_text;
     public Animator pade_anim;
+    public int dieing_lost_chsh;
     public CameraRotation rotation;
 
     private Animator anim;//현중
@@ -113,6 +114,7 @@ public class PlayerHealth : MonoBehaviour
     public IEnumerator RestoreFullHp()
     {
         yield return new WaitForSeconds(2.5f);
+        GameStatsManager.Instance.AddCashLocal(dieing_lost_chsh);
         gameObject.transform.position = respown_pos;
         pade_anim.SetTrigger("pade_in");//연출 추가
         anim.SetTrigger("Respwn");

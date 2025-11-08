@@ -1817,6 +1817,7 @@ MonoBehaviour:
   respown_pos: {x: 0, y: 0, z: 0}
   respwn_text: {fileID: 993495754}
   pade_anim: {fileID: 479872329}
+  dieing_lost_chsh: -12839
   rotation: {fileID: 1287619332}
   playerCamera: {fileID: 0}
 --- !u!114 &72534651 stripped
@@ -51323,6 +51324,10 @@ PrefabInstance:
       objectReference: {fileID: 1287619332}
     - target: {fileID: 7315178351007206478, guid: 20ed8369d6b134148860e4c74ba08a73, type: 3}
       propertyPath: is_not_minigame
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7315178351007206478, guid: 20ed8369d6b134148860e4c74ba08a73, type: 3}
+      propertyPath: now_complte_count
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7315178351007206478, guid: 20ed8369d6b134148860e4c74ba08a73, type: 3}
