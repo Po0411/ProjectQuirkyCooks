@@ -65,9 +65,9 @@ public class CookingMiniGame : MonoBehaviour
     public float down_fill_num;//수치가 내려가는 수치
 
     [Header("갈기 미니게임")]
-    public float max_out_rimite;//최대 시간
+/*    public float max_out_rimite;//최대 시간
     public float range_out_rimite;//범위 벗어날 수 있는 시간
-    public bool range_out;
+    public bool range_out;*/
     public float bar_move_speed;//바가 움직이는 속도 최대치는 0.1 초당 0.02씩 증가 최대치 
     public float max_bar_move_range;//바 움직이는 범위 초당 0.1씩 증가 최대치는 1
     public float min_bar_move_range;//바 움직이는 범위 초당 0.1씩 증가 최대치는 1
@@ -347,6 +347,7 @@ public class CookingMiniGame : MonoBehaviour
                             if (taget_slider.fillAmount == 1)
                             {
                                 success = true;
+                                //Debug.Log("WDawf");
                                 End_Mini_Game();
                             }
                         }
