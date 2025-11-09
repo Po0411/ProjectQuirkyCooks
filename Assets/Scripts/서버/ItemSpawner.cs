@@ -15,6 +15,9 @@ public class ItemSpawner : NetworkBehaviour
     [Header("스폰 개수")]
     [Min(0)] public int spawnCount = 10;
 
+    public float respwn_cool_time;//리스폰 쿨타임
+    float cool_time;
+
     // 중복 스폰 방지
     private bool _spawned = false;
 
@@ -40,6 +43,18 @@ public class ItemSpawner : NetworkBehaviour
         {
             SpawnItems(networked: false);
             _spawned = true;
+        }
+        cool_time = respwn_cool_time;
+    }
+
+    private void Update()
+    {
+        if(respwn_cool_time > 0) cool_time -= Time.deltaTime;
+
+        if(cool_time <= 0&& respwn_cool_time > 0)
+        {
+            SpawnItems(networked: false);
+            cool_time = respwn_cool_time;
         }
     }
 

@@ -31,7 +31,7 @@ public class CookingStation : MonoBehaviour, IInteractable
             case CookingType.Fry: return "● 튀기기";
             case CookingType.Chop: return "● 썰기";
             case CookingType.Blend: return "● 갈기";
-            case CookingType.Grill: return "● 굽기(미완성)";
+            case CookingType.Grill: return "● 굽기";
         }
         return "사용하기";
     }
@@ -74,7 +74,7 @@ public class CookingStation : MonoBehaviour, IInteractable
 
         Debug.Log(input.itemName);
 
-        if(result_text != null)result_text.gameObject.SetActive(true);
+        if(result_text != null) result_text.text = Get_Result_Text();
         Invoke("Text_off", 1f);
 
         if (is_result)

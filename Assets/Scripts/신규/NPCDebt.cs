@@ -1,4 +1,5 @@
 using System;
+using TMPro;
 using Unity.Services.Lobbies.Models;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -13,8 +14,10 @@ public class NPCDebt : MonoBehaviour, IInteractable
     public string GetInteractText() => "빚 상환";
 
     public string sceneName = "Clear";
+    public TextMeshProUGUI result_text;
     private int loaded = 0;
-    
+
+    public string Get_Result_Text() => "빛 상환 완료";
     void Update()
     {   
         if(loaded == 0)
@@ -79,6 +82,8 @@ public class NPCDebt : MonoBehaviour, IInteractable
                 Debug.LogWarning("[NPCDebt] Debt가 읽기전용이고 조정 메서드를 찾지 못했습니다.");
             }
         }
+        if (result_text != null) result_text.text = Get_Result_Text();
+        Invoke("Text_off", 1f);
     }
 
     // --- 추가된 함수: 빚이 0인지 확인 ---
@@ -105,5 +110,10 @@ public class NPCDebt : MonoBehaviour, IInteractable
         // 씬 빌드 설정에 'clearSceneName' 씬이 추가되어 있어야 합니다.
         SceneManager.LoadScene(sceneName, LoadSceneMode.Additive);
         loaded++;
+    }
+    private void Text_off()
+    {
+        if (result_text != null) result_text.gameObject.SetActive(false);
+
     }
 }
