@@ -4,6 +4,7 @@ using System.Globalization;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Windows;
+using static UnityEditor.Rendering.CameraUI;
 //using Unity.Netcode;
 
 public enum CookingType { Boil, Fry, Chop, Blend, Grill, Trash }
@@ -140,7 +141,14 @@ public class CookingStation : MonoBehaviour, IInteractable
             }
 
         }
-        else Debug.Log("실패");
+        else
+        {
+            In_Mg.RemoveItemLocal(input, 1);
+            result_item = fail_result_item_name;
+            ItemData output = In_Mg.GetItemByName(result_item);
+            In_Mg.AddItemLocal(output);
+            Debug.Log("게임 실패");
+        }
 
         mini_game_sc.OnCompleted.RemoveListener(Result_Chake);//이벤트 구독
         Invoke("Collider_OFF", col_on_time);

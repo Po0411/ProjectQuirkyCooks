@@ -230,7 +230,11 @@ public class CookingMiniGame : MonoBehaviour
                                 elapsed = 0;
                                 break;
                             }
-                            //else playing_count = 0;
+                            else 
+                            {
+                                elapsed = 0;
+                                break;
+                            }
                         }
 
                         if ((Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W)) && !is_wait_input)
@@ -246,8 +250,11 @@ public class CookingMiniGame : MonoBehaviour
                             }
                             else
                             {
-                                ins_arrow_obj[count].GetComponent<Arrow_State>().Arrow_Image_Chage(false);
-                                count += 1;
+                                elapsed = 0;
+                                playing_count = 0;
+                                End_Mini_Game();
+                                /* ins_arrow_obj[count].GetComponent<Arrow_State>().Arrow_Image_Chage(false);
+                                 count += 1;*/
                             }
                         }
                         else if ((Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S)) && !is_wait_input)
@@ -260,10 +267,13 @@ public class CookingMiniGame : MonoBehaviour
                                 playing_complte_count += 1;
                                 count += 1;
                             }
-                            else 
+                            else
                             {
-                                ins_arrow_obj[count].GetComponent<Arrow_State>().Arrow_Image_Chage(false);
-                                count += 1;
+                                elapsed = 0;
+                                playing_count = 0;
+                                End_Mini_Game();
+                                /*                                ins_arrow_obj[count].GetComponent<Arrow_State>().Arrow_Image_Chage(false);
+                                                                count += 1;*/
                             }
                         }
                         else if ((Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A)) && !is_wait_input)
@@ -278,8 +288,11 @@ public class CookingMiniGame : MonoBehaviour
                             }
                             else
                             {
-                                ins_arrow_obj[count].GetComponent<Arrow_State>().Arrow_Image_Chage(false);
-                                count += 1;
+                                elapsed = 0;
+                                playing_count = 0;
+                                End_Mini_Game();
+                                /*                ins_arrow_obj[count].GetComponent<Arrow_State>().Arrow_Image_Chage(false);
+                                                count += 1;*/
                             }
                         }
                         else if ((Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D)) && !is_wait_input)
@@ -294,8 +307,11 @@ public class CookingMiniGame : MonoBehaviour
                             }
                             else
                             {
-                                ins_arrow_obj[count].GetComponent<Arrow_State>().Arrow_Image_Chage(false);
-                                count += 1;
+                                elapsed = 0;
+                                playing_count = 0;
+                                End_Mini_Game();
+                                /*                                ins_arrow_obj[count].GetComponent<Arrow_State>().Arrow_Image_Chage(false);
+                                                                count += 1;*/
                             }
                         }
                         if (count < arrow_list.Count && !is_wait_input) //정답 카운트가 화살표 목록의 개수 이하일 경우에만
@@ -378,6 +394,10 @@ public class CookingMiniGame : MonoBehaviour
                     {
                         Debug.Log("통과");
                         now_complte_count += 1;
+                    }
+                    else
+                    {
+                        playing_count = 0;
                     }
                     if (now_complte_count == max_playing_count)
                     {
