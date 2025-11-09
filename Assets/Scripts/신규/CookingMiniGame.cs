@@ -227,6 +227,7 @@ public class CookingMiniGame : MonoBehaviour
                             if (playing_complte_count >= arrow_count_target[max_playing_count - playing_count])
                             {
                                 Debug.Log("반복 중 통과");
+                                elapsed = 0;
                                 break;
                             }
                             //else playing_count = 0;

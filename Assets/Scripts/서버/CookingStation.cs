@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.Windows;
 //using Unity.Netcode;
 
-public enum CookingType { Boil, Fry, Chop, Blend, Grill }
+public enum CookingType { Boil, Fry, Chop, Blend, Grill, Trash }
 
 public class CookingStation : MonoBehaviour, IInteractable
 {
@@ -32,6 +32,7 @@ public class CookingStation : MonoBehaviour, IInteractable
             case CookingType.Chop: return "● 썰기";
             case CookingType.Blend: return "● 갈기";
             case CookingType.Grill: return "● 굽기";
+            case CookingType.Trash: return "● 버리기";
         }
         return "사용하기";
     }
@@ -44,11 +45,19 @@ public class CookingStation : MonoBehaviour, IInteractable
         if (inventory == null) return;
         if (inventory.slots[inventory.selectedIndex].currentItem == null) return;
 
-        mini_game_sc.OnCompleted.AddListener(Result_Chake);//이벤트 구독
-        gameObject.GetComponent<BoxCollider>().enabled = false;
-        mini_game_sc.StartMiniGame();
 
-        In_Mg = inventory;
+        if (type == CookingType.Trash)
+        {
+            inventory.RemoveItemLocal(inventory.slots[inventory.selectedIndex].currentItem,1);
+        }
+        else
+        {
+            mini_game_sc.OnCompleted.AddListener(Result_Chake);//이벤트 구독
+            gameObject.GetComponent<BoxCollider>().enabled = false;
+            mini_game_sc.StartMiniGame();
+
+            In_Mg = inventory;
+        }
 
     }
 
@@ -56,6 +65,7 @@ public class CookingStation : MonoBehaviour, IInteractable
     public void Interact()
     {
         InventoryManager inv = FindObjectOfType<InventoryManager>();
+
         if (inv != null)
             Interact(inv);
         else

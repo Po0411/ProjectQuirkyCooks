@@ -22456,6 +22456,30 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!1 &925070872 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2835528608186394093, guid: 4c2dc2a683e0d8a47912a9d39d423c33, type: 3}
+  m_PrefabInstance: {fileID: 1708202218}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &925070877
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 925070872}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9a4ace54cb702042b38cd98e51ad422, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  type: 0
+  requiredItemName: []
+  resultItemName: []
+  fail_result_item_name: 
+  mini_game_sc: {fileID: 0}
+  col_on_time: 0
+  result_text: {fileID: 0}
 --- !u!1 &925113439
 GameObject:
   m_ObjectHideFlags: 0
@@ -22965,7 +22989,7 @@ MonoBehaviour:
   center: {x: 0, y: 0.54, z: 0}
   size: {x: 10, y: 1, z: 10}
   spawnCount: 10
-  respwn_cool_time: 5
+  respwn_cool_time: 60
 --- !u!114 &938909104
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -35230,6 +35254,30 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4390189117440331882, guid: a9f5be64a38ef814ba1099e269d2b778, type: 3}
   m_PrefabInstance: {fileID: 1418875985}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1418935918 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2835528608186394093, guid: 4c2dc2a683e0d8a47912a9d39d423c33, type: 3}
+  m_PrefabInstance: {fileID: 3993392263207420898}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1418935920
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1418935918}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9a4ace54cb702042b38cd98e51ad422, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  type: 5
+  requiredItemName: []
+  resultItemName: []
+  fail_result_item_name: 
+  mini_game_sc: {fileID: 0}
+  col_on_time: 0
+  result_text: {fileID: 0}
 --- !u!1001 &1420899911
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -42483,6 +42531,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2835528608186394093, guid: 4c2dc2a683e0d8a47912a9d39d423c33, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 6227075599032771003, guid: 4c2dc2a683e0d8a47912a9d39d423c33, type: 3}
       propertyPath: m_Name
       value: Counter
@@ -42494,7 +42546,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 2835528608186394093, guid: 4c2dc2a683e0d8a47912a9d39d423c33, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 925070877}
   m_SourcePrefab: {fileID: 100100000, guid: 4c2dc2a683e0d8a47912a9d39d423c33, type: 3}
 --- !u!4 &1708202219 stripped
 Transform:
@@ -56551,6 +56606,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2835528608186394093, guid: 4c2dc2a683e0d8a47912a9d39d423c33, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 6227075599032771003, guid: 4c2dc2a683e0d8a47912a9d39d423c33, type: 3}
       propertyPath: m_Name
       value: Counter
@@ -56562,7 +56621,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 2835528608186394093, guid: 4c2dc2a683e0d8a47912a9d39d423c33, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1418935920}
   m_SourcePrefab: {fileID: 100100000, guid: 4c2dc2a683e0d8a47912a9d39d423c33, type: 3}
 --- !u!1001 &4197681775022185348
 PrefabInstance:
