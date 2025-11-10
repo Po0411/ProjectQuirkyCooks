@@ -159,6 +159,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d29a91860f2c6e40858fe97273f7196, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemData: {fileID: 11400000, guid: 0cf50a1127cfd5b488bc6a7c47676496, type: 2}
-  maxDistance: 3
+  itemData: {fileID: 0}
+  maxDistance: 5
   interactKey: 101

@@ -176,5 +176,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemData: {fileID: 11400000, guid: 97ae6b85a357f984ebdab433e0f244e0, type: 2}
-  maxDistance: 3
+  maxDistance: 5
   interactKey: 101

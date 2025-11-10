@@ -151,7 +151,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemData: {fileID: 11400000, guid: 8345adec342718441a157996bfad0a60, type: 2}
-  maxDistance: 3
+  maxDistance: 5
   interactKey: 101
 --- !u!65 &-2937557505592767637
 BoxCollider:
