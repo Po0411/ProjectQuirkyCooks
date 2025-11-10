@@ -17,6 +17,9 @@ public class ItemSpawner : NetworkBehaviour
 
     public float respwn_cool_time;//������ ��Ÿ��
     float cool_time;
+    public float dspwn_cool_time;
+    float d_cool_time;
+    public List<GameObject> dspwn_objs=new List<GameObject>();
 
     // �ߺ� ���� ����
     private bool _spawned = false;
@@ -45,17 +48,29 @@ public class ItemSpawner : NetworkBehaviour
             _spawned = true;
         }
         cool_time = respwn_cool_time;
+        d_cool_time = dspwn_cool_time;
     }
 
     private void Update()
     {
         if(respwn_cool_time > 0) cool_time -= Time.deltaTime;
+        if(dspwn_cool_time > 0)d_cool_time -= Time.deltaTime;
 
         if(cool_time <= 0&& respwn_cool_time > 0)
         {
             SpawnItems(networked: false);
             cool_time = respwn_cool_time;
         }
+        if(d_cool_time <= 0 && dspwn_cool_time > 0)
+        {
+            for (int i = 0; i < dspwn_objs.Count; i++)
+            {
+                Destroy(dspwn_objs[i]);
+            }
+            dspwn_objs.Clear();
+            d_cool_time = dspwn_cool_time;
+        }
+        
     }
 
     private void SpawnItems(bool networked)
@@ -88,6 +103,7 @@ public class ItemSpawner : NetworkBehaviour
                         "Ŭ���̾�Ʈ�� ����ȭ���� �ʽ��ϴ�. (�̱ۿ� �������̶�� ����)");
                 }
             }
+            dspwn_objs.Add(obj);
             // �̱��� Instantiate�� �ϸ� ��
         }
     }
