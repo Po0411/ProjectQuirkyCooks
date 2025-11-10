@@ -1921,7 +1921,7 @@ MonoBehaviour:
   - recipeName: "\uC2A4\uD14C\uC774\uD06C"
     result: {fileID: 11400000, guid: d39a528aac6954d42aeeda14113d54ba, type: 2}
     ingredients:
-    - {fileID: 11400000, guid: 0cf50a1127cfd5b488bc6a7c47676496, type: 2}
+    - {fileID: 11400000, guid: fa621254d36a35641a29cd8f8bb35c99, type: 2}
     - {fileID: 11400000, guid: 6a9ead8977893b84ea311a14021d93ed, type: 2}
     - {fileID: 11400000, guid: f34b1c7edb93f124a95b644b2fd6d35a, type: 2}
   - recipeName: "\uD584\uBC84\uAC70"
