@@ -47,10 +47,15 @@ public class SceneButtonLoader : MonoBehaviour
         quitButton.SetActive(true);
         audioSource.PlayOneShot(hovering);
     }
-    
+
     public void HideQuitButton()
     {
         quitButton.SetActive(false);
+    }
+    
+    public void Quit()
+    {
+        Application.Quit();
     }
 }
 

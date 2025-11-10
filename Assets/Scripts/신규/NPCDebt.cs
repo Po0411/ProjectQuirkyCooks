@@ -108,7 +108,7 @@ public class NPCDebt : MonoBehaviour, IInteractable
         }
 
         // 씬 빌드 설정에 'clearSceneName' 씬이 추가되어 있어야 합니다.
-        SceneManager.LoadScene(sceneName, LoadSceneMode.Additive);
+        SceneManager.LoadScene(sceneName);
         loaded++;
     }
     private void Text_off()

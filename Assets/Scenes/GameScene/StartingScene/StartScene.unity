@@ -3888,7 +3888,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1240831592}
         m_TargetAssemblyTypeName: SceneButtonLoader, Assembly-CSharp
-        m_MethodName: LoadScene
+        m_MethodName: Quit
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
