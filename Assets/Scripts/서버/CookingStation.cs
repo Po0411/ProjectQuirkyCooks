@@ -4,7 +4,7 @@ using System.Globalization;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Windows;
-using static UnityEditor.Rendering.CameraUI;
+//using static UnityEditor.Rendering.CameraUI;
 //using Unity.Netcode;
 
 public enum CookingType { Boil, Fry, Chop, Blend, Grill, Trash }

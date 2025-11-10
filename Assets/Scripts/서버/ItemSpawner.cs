@@ -5,30 +5,30 @@ using Unity.Netcode;
 
 public class ItemSpawner : NetworkBehaviour
 {
-    [Header("¾ÆÀÌÅÛ ÇÁ¸®ÆÕµé (ºñ¾îÀÖÀ¸¸é ½ºÆù ¾È ÇÔ)")]
+    [Header("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Õµï¿½ (ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½)")]
     public List<GameObject> itemPrefabs = new List<GameObject>();
 
-    [Header("½ºÆù ¹Ú½º (·ÎÄÃÁÂÇ¥ ¿ÀÇÁ¼Â)")]
-    public Vector3 center = Vector3.zero;              // ÀÌ ÄÄÆ÷³ÍÆ®ÀÇ Transform ±âÁØ ¿ÀÇÁ¼Â
-    public Vector3 size = new Vector3(10, 1, 10);    // °¡·Î(Y´Â µÎ²²), ¼¼·Î(Z)
+    [Header("ï¿½ï¿½ï¿½ï¿½ ï¿½Ú½ï¿½ (ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç¥ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)")]
+    public Vector3 center = Vector3.zero;              // ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ Transform ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    public Vector3 size = new Vector3(10, 1, 10);    // ï¿½ï¿½ï¿½ï¿½(Yï¿½ï¿½ ï¿½Î²ï¿½), ï¿½ï¿½ï¿½ï¿½(Z)
 
-    [Header("½ºÆù °³¼ö")]
+    [Header("ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½")]
     [Min(0)] public int spawnCount = 10;
 
-    public float respwn_cool_time;//¸®½ºÆù ÄðÅ¸ÀÓ
+    public float respwn_cool_time;//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Å¸ï¿½ï¿½
     float cool_time;
 
-    // Áßº¹ ½ºÆù ¹æÁö
+    // ï¿½ßºï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     private bool _spawned = false;
 
-    // --- ÇïÆÛ: NGO µ¿ÀÛ ¿©ºÎ
+    // --- ï¿½ï¿½ï¿½ï¿½: NGO ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     private static bool NetActive =>
         NetworkManager.Singleton != null && NetworkManager.Singleton.IsListening;
 
-    // --- ¼­¹ö/½Ì±Û ¸ðµÎ¿¡¼­ ÇÑ ¹ø¸¸ ½ºÆù
+    // --- ï¿½ï¿½ï¿½ï¿½/ï¿½Ì±ï¿½ ï¿½ï¿½Î¿ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     public override void OnNetworkSpawn()
     {
-        // ¸ÖÆ¼(=NGO È°¼º)ÀÏ ¶§¸¸ ¼­¹ö°¡ ½ºÆù
+        // ï¿½ï¿½Æ¼(=NGO È°ï¿½ï¿½)ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         if (IsServer && !_spawned)
         {
             SpawnItems(networked: true);
@@ -38,7 +38,7 @@ public class ItemSpawner : NetworkBehaviour
 
     private void Start()
     {
-        // ½Ì±Û(=NGO ºñÈ°¼º)ÀÏ ¶© Start¿¡¼­ ·ÎÄÃ ½ºÆù
+        // ï¿½Ì±ï¿½(=NGO ï¿½ï¿½È°ï¿½ï¿½)ï¿½ï¿½ ï¿½ï¿½ Startï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         if (!NetActive && !_spawned)
         {
             SpawnItems(networked: false);
@@ -66,7 +66,7 @@ public class ItemSpawner : NetworkBehaviour
         for (int i = 0; i < spawnCount; i++)
         {
             Vector3 spawnPos = GetRandomPositionInBox();
-            Quaternion rot = Quaternion.identity;
+            Quaternion rot = Quaternion.Euler(0f, Random.Range(0f, 360f), 0f);
 
             GameObject prefab = itemPrefabs[Random.Range(0, itemPrefabs.Count)];
             if (prefab == null) continue;
@@ -75,7 +75,7 @@ public class ItemSpawner : NetworkBehaviour
 
             if (networked)
             {
-                // ¸ÖÆ¼: NetworkObject°¡ ÀÖÀ¸¸é ³×Æ®¿öÅ© ½ºÆù
+                // ï¿½ï¿½Æ¼: NetworkObjectï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Æ®ï¿½ï¿½Å© ï¿½ï¿½ï¿½ï¿½
                 var netObj = obj.GetComponent<NetworkObject>();
                 if (netObj != null)
                 {
@@ -84,17 +84,17 @@ public class ItemSpawner : NetworkBehaviour
                 else
                 {
                     Debug.LogWarning(
-                        $"[ItemSpawner] '{prefab.name}'¿¡ NetworkObject°¡ ¾ø¾î " +
-                        "Å¬¶óÀÌ¾ðÆ®¿Í µ¿±âÈ­µÇÁö ¾Ê½À´Ï´Ù. (½Ì±Û¿ë ÇÁ¸®ÆÕÀÌ¶ó¸é Á¤»ó)");
+                        $"[ItemSpawner] '{prefab.name}'ï¿½ï¿½ NetworkObjectï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ " +
+                        "Å¬ï¿½ï¿½ï¿½Ì¾ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½È­ï¿½ï¿½ï¿½ï¿½ ï¿½Ê½ï¿½ï¿½Ï´ï¿½. (ï¿½Ì±Û¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì¶ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½)");
                 }
             }
-            // ½Ì±ÛÀº Instantiate¸¸ ÇÏ¸é ³¡
+            // ï¿½Ì±ï¿½ï¿½ï¿½ Instantiateï¿½ï¿½ ï¿½Ï¸ï¿½ ï¿½ï¿½
         }
     }
 
     private Vector3 GetRandomPositionInBox()
     {
-        // ¹Ú½º´Â ÀÌ ÄÄÆ÷³ÍÆ®ÀÇ Transform ±âÁØ(·ÎÄÃ ¿ÀÇÁ¼Â)
+        // ï¿½Ú½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ Transform ï¿½ï¿½ï¿½ï¿½(ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)
         Vector3 localRandom = new Vector3(
             Random.Range(-size.x * 0.5f, size.x * 0.5f),
             Random.Range(-size.y * 0.5f, size.y * 0.5f),
@@ -103,7 +103,7 @@ public class ItemSpawner : NetworkBehaviour
         return transform.TransformPoint(center + localRandom);
     }
 
-    // ¿¡µðÅÍ¿¡¼­ ¹üÀ§ º¸ÀÌ±â
+    // ï¿½ï¿½ï¿½ï¿½ï¿½Í¿ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ì±ï¿½
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.green;

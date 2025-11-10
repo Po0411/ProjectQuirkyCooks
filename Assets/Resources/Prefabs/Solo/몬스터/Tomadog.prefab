@@ -286,7 +286,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dbc230e5fc6f76b4581f00be2637fbcb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHp: 5000
+  maxHp: 3000
   healthBar: {fileID: 681221146569875593}
   meatPrefab: {fileID: 1636329165226476837, guid: e3191818bb20f8947825a35a4be038df, type: 3}
   spawnForce: 5

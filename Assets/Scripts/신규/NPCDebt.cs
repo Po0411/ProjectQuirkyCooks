@@ -20,10 +20,7 @@ public class NPCDebt : MonoBehaviour, IInteractable
     public string Get_Result_Text() => "빛 상환 완료";
     void Update()
     {   
-        if(loaded == 0)
-        {
-            CheckForVictory();
-        }
+        CheckForVictory();
     }
 
     public void Interact()  // 편의
@@ -89,11 +86,10 @@ public class NPCDebt : MonoBehaviour, IInteractable
     // --- 추가된 함수: 빚이 0인지 확인 ---
     private void CheckForVictory()
     {
-        if(GameStatsManager.debtReduce == true)
+        if (GameStatsManager.debtReduce == true)
         {
             Debug.Log("🎉 빚을 모두 갚았습니다! 클리어 씬을 로드합니다.");
             LoadClearScene();
-            loaded++;
         }
     }
 
@@ -109,7 +105,6 @@ public class NPCDebt : MonoBehaviour, IInteractable
 
         // 씬 빌드 설정에 'clearSceneName' 씬이 추가되어 있어야 합니다.
         SceneManager.LoadScene(sceneName);
-        loaded++;
     }
     private void Text_off()
     {

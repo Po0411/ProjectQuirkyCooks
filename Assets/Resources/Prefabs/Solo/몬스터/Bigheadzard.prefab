@@ -311,7 +311,7 @@ MonoBehaviour:
   chaseRange: 5
   attackRange: 2
   closeAttackRange: 1
-  moveSpeed: 1.2
+  moveSpeed: 5
   krangMoveSpeed: 1.5
   attackInterval: 0.2
   krangAttackInterval: 0.3
