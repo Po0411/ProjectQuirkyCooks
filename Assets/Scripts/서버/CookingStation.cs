@@ -28,12 +28,12 @@ public class CookingStation : MonoBehaviour, IInteractable
     {
         switch (type)
         {
-            case CookingType.Boil: return "● 끓이기";
-            case CookingType.Fry: return "● 튀기기";
-            case CookingType.Chop: return "● 썰기";
-            case CookingType.Blend: return "● 갈기";
-            case CookingType.Grill: return "● 굽기";
-            case CookingType.Trash: return "● 버리기";
+            case CookingType.Boil: return "끓이기";
+            case CookingType.Fry: return "튀기기";
+            case CookingType.Chop: return "자르기";
+            case CookingType.Blend: return "갈기";
+            case CookingType.Grill: return "굽기";
+            case CookingType.Trash: return "버리기";
         }
         return "사용하기";
     }
