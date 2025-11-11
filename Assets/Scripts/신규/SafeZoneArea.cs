@@ -4,17 +4,19 @@ using UnityEngine;
 [RequireComponent(typeof(Collider))]
 public class SafeZoneRegen : MonoBehaviour
 {
-    [Tooltip("ÀÌ °£°Ý(ÃÊ)¸¶´Ù ¿µ¿ª ³» ÇÃ·¹ÀÌ¾îÀÇ HP ½½·ÔÀ» 1Ä­ È¸º¹ÇÕ´Ï´Ù.")]
+    [Tooltip("ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½(ï¿½ï¿½)ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ï¿½ï¿½ HP ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 1Ä­ È¸ï¿½ï¿½ï¿½Õ´Ï´ï¿½.")]
     public float healIntervalSeconds = 3f;
 
-    // ÇÃ·¹ÀÌ¾îº° °æ°ú ½Ã°£
+    public GameObject recipe;
+
+    // ï¿½Ã·ï¿½ï¿½Ì¾îº° ï¿½ï¿½ï¿½ ï¿½Ã°ï¿½
     private readonly Dictionary<PlayerHealth, float> timers = new Dictionary<PlayerHealth, float>();
 
     void Reset()
     {
         var col = GetComponent<Collider>();
         col.isTrigger = true;
-        // ¿øÇÏ¸é ÅÂ±× ÁöÁ¤ °¡´É: gameObject.tag = "SafeZone";
+        // ï¿½ï¿½ï¿½Ï¸ï¿½ ï¿½Â±ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½: gameObject.tag = "SafeZone";
     }
 
     void OnTriggerEnter(Collider other)
@@ -22,6 +24,8 @@ public class SafeZoneRegen : MonoBehaviour
         var hp = other.GetComponentInParent<PlayerHealth>();
         if (hp == null) return;
         timers[hp] = 0f;
+
+        recipe.SetActive(true);
     }
 
     void OnTriggerStay(Collider other)
@@ -35,8 +39,8 @@ public class SafeZoneRegen : MonoBehaviour
 
         if (t >= healIntervalSeconds)
         {
-            hp.HealSlots(1);  // ½½·Ô 1Ä­ È¸º¹
-            t -= healIntervalSeconds; // °£°Ý ÁÖ±â À¯Áö
+            hp.HealSlots(1);  // ï¿½ï¿½ï¿½ï¿½ 1Ä­ È¸ï¿½ï¿½
+            t -= healIntervalSeconds; // ï¿½ï¿½ï¿½ï¿½ ï¿½Ö±ï¿½ ï¿½ï¿½ï¿½ï¿½
         }
 
         timers[hp] = t;
@@ -46,5 +50,7 @@ public class SafeZoneRegen : MonoBehaviour
     {
         var hp = other.GetComponentInParent<PlayerHealth>();
         if (hp != null) timers.Remove(hp);
+
+        recipe.SetActive(false);
     }
 }
