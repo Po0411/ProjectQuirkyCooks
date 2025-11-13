@@ -7,8 +7,6 @@ public class SafeZoneRegen : MonoBehaviour
     [Tooltip("�� ����(��)���� ���� �� �÷��̾��� HP ������ 1ĭ ȸ���մϴ�.")]
     public float healIntervalSeconds = 3f;
 
-    public GameObject recipe;
-
     // �÷��̾ ��� �ð�
     private readonly Dictionary<PlayerHealth, float> timers = new Dictionary<PlayerHealth, float>();
 
@@ -24,8 +22,6 @@ public class SafeZoneRegen : MonoBehaviour
         var hp = other.GetComponentInParent<PlayerHealth>();
         if (hp == null) return;
         timers[hp] = 0f;
-
-        recipe.SetActive(true);
     }
 
     void OnTriggerStay(Collider other)
@@ -44,13 +40,5 @@ public class SafeZoneRegen : MonoBehaviour
         }
 
         timers[hp] = t;
-    }
-
-    void OnTriggerExit(Collider other)
-    {
-        var hp = other.GetComponentInParent<PlayerHealth>();
-        if (hp != null) timers.Remove(hp);
-
-        recipe.SetActive(false);
     }
 }

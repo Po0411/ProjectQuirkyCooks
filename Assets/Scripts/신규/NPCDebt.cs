@@ -15,7 +15,7 @@ public class NPCDebt : MonoBehaviour, IInteractable
 
     public string sceneName = "Clear";
     public TextMeshProUGUI result_text;
-    private int loaded = 0;
+    //private int loaded = 0;
 
     public string Get_Result_Text() => "빛 상환 완료";
     void Update()

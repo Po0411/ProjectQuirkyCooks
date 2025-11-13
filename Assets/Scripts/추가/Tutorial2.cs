@@ -2,19 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Tutorial : MonoBehaviour
+public class Tutorial2 : MonoBehaviour
 {
     public GameObject targetUI;
     public GameObject recipe;
-
-    void Start()
-    {
-        if (targetUI != null)
-        {
-            targetUI.SetActive(false);
-        }
-    }
-
+    // Start is called before the first frame update
+    
     void Update()
     {
         if (targetUI == null)
